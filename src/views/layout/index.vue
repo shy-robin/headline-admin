@@ -1,15 +1,12 @@
 <template>
   <el-container class="layout-container">
-    <el-aside
-      class="aside"
-      width="200px"
-    >
+    <el-aside class="aside" width="200px">
       <layout-aside class="layout-aside" />
     </el-aside>
     <el-container>
-      <el-header
-        class="header"
-      >顶部栏</el-header>
+      <el-header class="header">
+        <layout-header class="layout-header" />
+      </el-header>
       <el-main>
         <!-- 嵌套路由出口 -->
         <router-view></router-view>
@@ -20,11 +17,13 @@
 
 <script>
 import LayoutAside from './components/LayoutAside.vue'
+import LayoutHeader from './components/LayoutHeader.vue'
 
 export default {
   name: 'LayoutIndex',
   components: {
-    LayoutAside
+    LayoutAside,
+    LayoutHeader
   }
 }
 </script>
@@ -42,7 +41,10 @@ export default {
     }
   }
   .header {
-    background-color: green;
+    border-bottom: 1px solid rgb(231, 231, 231);
+    .layout-header {
+      height: 100%;
+    }
   }
 }
 </style>
