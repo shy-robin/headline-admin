@@ -27,6 +27,7 @@
               class="login-btn"
               type="primary"
               @click="onLogin"
+              :loading='isLoading'
             >登录</el-button>
           </el-form-item>
       </el-form>
@@ -45,7 +46,8 @@ export default {
         mobile: '', // 手机号
         code: '' // 验证码
       },
-      checked: false
+      checked: false, // 是否勾选条款
+      isLoading: false // 是否登录中
     }
   },
   methods: {
@@ -53,16 +55,20 @@ export default {
       // 1.获取表单数据
       const user = this.user
       // 2.表单验证
-      // 3.发送请求
+      // 3.发送请求，处理响应
+      this.isLoading = true // 登录中 loading...
+
       try {
         const res = await request({
           method: 'POST',
           url: '/mp/v1_0/authorizations',
           data: user // 请求body
         })
+        this.isLoading = false
         this.$msgSuccess('登录成功！')
         console.log(res)
       } catch (ex) { // 捕获错误
+        this.isLoading = false
         this.$msgError('登录失败！')
         console.log(ex)
       }
