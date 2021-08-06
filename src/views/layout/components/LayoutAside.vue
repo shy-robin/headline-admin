@@ -4,34 +4,35 @@
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b"
+    router
   >
     <div class="logo">明日头条</div>
     <el-menu-item index="/">
-      <i class="el-icon-s-home"></i>
+      <i class="iconfont icon-index-copy"></i>
       <span slot="title">首页</span>
     </el-menu-item>
     <el-menu-item index="/article">
-      <i class="el-icon-document"></i>
+      <i class="iconfont icon-neirong"></i>
       <span slot="title">内容管理</span>
     </el-menu-item>
     <el-menu-item index="/image">
-      <i class="el-icon-notebook-2"></i>
+      <i class="iconfont icon-sucai"></i>
       <span slot="title">素材管理</span>
     </el-menu-item>
     <el-menu-item index="/publish">
-      <i class="el-icon-notebook-1"></i>
+      <i class="iconfont icon-fabu"></i>
       <span slot="title">发布文章</span>
     </el-menu-item>
     <el-menu-item index="/comment">
-      <i class="el-icon-s-comment"></i>
+      <i class="iconfont icon-retouch"></i>
       <span slot="title">评论管理</span>
     </el-menu-item>
     <el-menu-item index="/fans">
-      <i class="el-icon-star-off"></i>
+      <i class="iconfont icon-fensi"></i>
       <span slot="title">粉丝管理</span>
     </el-menu-item>
     <el-menu-item index="/setting">
-      <i class="el-icon-setting"></i>
+      <i class="iconfont icon-shezhi"></i>
       <span slot="title">个人设置</span>
     </el-menu-item>
   </el-menu>
@@ -50,5 +51,9 @@ export default {
   font-weight: bold;
   text-align: center;
   padding: 20px 0;
+}
+.iconfont {
+  width: 24px;
+  margin-right: 10px;
 }
 </style>

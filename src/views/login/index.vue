@@ -7,14 +7,14 @@
             <el-input
               v-model="user.mobile"
               placeholder='请输入手机号'
-              prefix-icon='el-icon-phone-outline'
+              prefix-icon='iconfont icon-shouji'
             ></el-input>
           </el-form-item>
           <el-form-item prop='code'>
             <el-input
               v-model="user.code"
               placeholder='请输入验证码'
-              prefix-icon='el-icon-edit-outline'
+              prefix-icon='iconfont icon-mima'
             ></el-input>
           </el-form-item>
           <el-form-item prop='isAgree'>
