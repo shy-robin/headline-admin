@@ -60,8 +60,10 @@ export default {
           url: '/mp/v1_0/authorizations',
           data: user // 请求body
         })
+        this.$msgSuccess('登录成功！')
         console.log(res)
       } catch (ex) { // 捕获错误
+        this.$msgError('登录失败！')
         console.log(ex)
       }
     }

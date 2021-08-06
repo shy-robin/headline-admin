@@ -2,11 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import ElementUI from 'element-ui' // 加载组件库
-import 'element-ui/lib/theme-chalk/index.css' // 加载组件库样式
+import './plugins/index' // 导入插件
 import './styles/reset.scss' // 样式重置
-
-Vue.use(ElementUI) // 全局注册组件库
 
 Vue.config.productionTip = false
 
