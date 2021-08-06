@@ -3,7 +3,9 @@
     <el-aside
       class="aside"
       width="200px"
-    >侧边栏</el-aside>
+    >
+      <layout-aside class="layout-aside" />
+    </el-aside>
     <el-container>
       <el-header
         class="header"
@@ -17,8 +19,13 @@
 </template>
 
 <script>
+import LayoutAside from './components/LayoutAside.vue'
+
 export default {
-  name: 'LayoutIndex'
+  name: 'LayoutIndex',
+  components: {
+    LayoutAside
+  }
 }
 </script>
 
@@ -30,7 +37,9 @@ export default {
   top: 0;
   bottom: 0;
   .aside {
-    background-color: red;
+    .layout-aside {
+      height: 100%;
+    }
   }
   .header {
     background-color: green;
