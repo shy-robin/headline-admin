@@ -89,6 +89,9 @@ export default {
         const res = await login(this.user)
         this.$msgSuccess('登录成功！')
         console.log(res)
+        this.$router.push({
+          name: 'home'
+        })
       } catch (ex) { // 捕获错误
         this.$msgError('登录失败！')
         console.log(ex)
