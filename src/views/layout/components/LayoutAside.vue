@@ -5,8 +5,12 @@
     text-color="#fff"
     active-text-color="#ffd04b"
     router
+    :collapse='isCollapse'
   >
-    <div class="logo">明日头条</div>
+    <div class="logo">
+      <span v-if=!isCollapse>明日头条</span>
+      <span v-else>&nbsp;</span>
+    </div>
     <el-menu-item index="/">
       <i class="iconfont icon-index-copy"></i>
       <span slot="title">首页</span>
@@ -39,18 +43,30 @@
 </template>
 
 <script>
+import EventBus from 'utils/bus.js'
+
 export default {
-  name: 'LayoutAside'
+  name: 'LayoutAside',
+  data() {
+    return {
+      isCollapse: false
+    }
+  },
+  created() {
+    EventBus.$on('foldMenu', () => {
+      this.isCollapse = !this.isCollapse
+    })
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .logo {
   color: #fff;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
   text-align: center;
-  padding: 20px 0;
+  padding: 20px 20px;
 }
 .iconfont {
   width: 24px;

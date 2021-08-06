@@ -1,7 +1,10 @@
 <template>
   <div class="header-container">
     <div class="left">
-      <i class="el-icon-s-fold"></i>
+      <i
+        :class="[isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
+        @click="foldMenu"
+      ></i>
       <span class="greeting">{{ userInfo.email }}</span>
     </div>
     <div class="right">
@@ -26,12 +29,14 @@
 
 <script>
 import { getUserProfile } from 'api/user.js'
+import EventBus from 'utils/bus.js'
 
 export default {
   name: 'LayoutHeader',
   data() {
     return {
-      userInfo: {} // 用户个人信息
+      userInfo: {}, // 用户个人信息
+      isCollapse: false
     }
   },
   created() {
@@ -45,6 +50,10 @@ export default {
       } catch (ex) {
         console.log(ex)
       }
+    },
+    foldMenu() {
+      this.isCollapse = !this.isCollapse
+      EventBus.$emit('foldMenu')
     }
   }
 }
@@ -56,8 +65,11 @@ export default {
   justify-content: space-between;
   align-items: center;
   .left {
+    display: flex;
+    align-items: center;
     i {
       cursor: pointer;
+      font-size: 25px;
     }
     .greeting {
       margin-left: 10px;
