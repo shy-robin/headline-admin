@@ -12,15 +12,15 @@ const login = data => {
 // 获取用户信息
 const getUserProfile = () => {
   // 获取 localStorage 中的 token
-  const token = window.localStorage.getItem('user')
+  // const token = window.localStorage.getItem('user')
 
   return request({
     method: 'GET',
-    url: '/mp/v1_0/user/profile',
-    // 将 token 数据加入请求头 Authorization 中
-    headers: {
-      Authorization: `Bearer ${token}` // 注意格式！！！
-    }
+    url: '/mp/v1_0/user/profile'
+    // // 将 token 数据加入请求头 Authorization 中
+    // headers: {
+    //   Authorization: `Bearer ${token}` // 注意格式！！！
+    // }
   })
 }
 
