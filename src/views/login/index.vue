@@ -5,7 +5,7 @@
       <el-form ref="form" :model="user">
           <el-form-item>
             <el-input
-              v-model="user.phone"
+              v-model="user.mobile"
               placeholder='请输入手机号'
               prefix-icon='el-icon-phone-outline'
             ></el-input>
@@ -26,7 +26,7 @@
             <el-button
               class="login-btn"
               type="primary"
-              @click="onSubmit"
+              @click="onLogin"
             >登录</el-button>
           </el-form-item>
       </el-form>
@@ -35,20 +35,35 @@
 </template>
 
 <script>
+import request from 'utils/request.js'
+
 export default {
   name: 'LoginIndex',
   data() {
     return {
       user: {
-        phone: '',
-        code: ''
+        mobile: '', // 手机号
+        code: '' // 验证码
       },
       checked: false
     }
   },
   methods: {
-    onSubmit() {
-      alert('yes')
+    async onLogin() {
+      // 1.获取表单数据
+      const user = this.user
+      // 2.表单验证
+      // 3.发送请求
+      try {
+        const res = await request({
+          method: 'POST',
+          url: '/mp/v1_0/authorizations',
+          data: user // 请求body
+        })
+        console.log(res)
+      } catch (ex) { // 捕获错误
+        console.log(ex)
+      }
     }
   }
 }
