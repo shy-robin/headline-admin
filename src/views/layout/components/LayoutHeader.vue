@@ -2,14 +2,14 @@
   <div class="header-container">
     <div class="left">
       <i class="el-icon-s-fold"></i>
-      <span class="greeting">{{ userInfo.greeting }}</span>
+      <span class="greeting">{{ userInfo.email }}</span>
     </div>
     <div class="right">
       <el-dropdown>
         <div class="el-dropdown-link">
           <img
             class="avatar"
-            :src="userInfo.avatar"
+            :src="userInfo.photo"
           >
           <span>
             {{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -25,14 +25,25 @@
 </template>
 
 <script>
+import { getUserProfile } from 'api/user.js'
+
 export default {
   name: 'LayoutHeader',
   data() {
     return {
-      userInfo: {
-        avatar: 'https://gitee.com/gainmore/imglib/raw/master/img/20210806161701.png',
-        name: 'Akina',
-        greeting: '用户，你好！'
+      userInfo: {} // 用户个人信息
+    }
+  },
+  created() {
+    this.loadUserProfile()
+  },
+  methods: {
+    async loadUserProfile() {
+      try {
+        const res = await getUserProfile()
+        this.userInfo = res.data.data
+      } catch (ex) {
+        console.log(ex)
       }
     }
   }

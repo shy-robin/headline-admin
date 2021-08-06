@@ -89,6 +89,9 @@ export default {
         const res = await login(this.user)
         this.$msgSuccess('登录成功！')
         console.log(res)
+        // 登录成功，将响应的 token 存入 localStorage 中
+        window.localStorage.setItem('user', res.data.data.token)
+        // 跳转到首页
         this.$router.push({
           name: 'home'
         })
