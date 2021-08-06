@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import request from 'utils/request.js'
+import { login } from 'api/user.js'
 
 export default {
   name: 'LoginIndex',
@@ -86,11 +86,7 @@ export default {
 
       // 发送请求，处理响应
       try {
-        const res = await request({
-          method: 'POST',
-          url: '/mp/v1_0/authorizations',
-          data: this.user // 请求body
-        })
+        const res = await login(this.user)
         this.$msgSuccess('登录成功！')
         console.log(res)
       } catch (ex) { // 捕获错误
