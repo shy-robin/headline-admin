@@ -1,16 +1,21 @@
 import request from 'utils/request.js'
 
-const getArticleList = (page, perPage) => {
+const getArticleList = (params) => {
   return request({
     method: 'GET',
     url: '/mp/v1_0/articles',
-    params: {
-      page, // 第几页
-      per_page: perPage // 每页多少条
-    }
+    params
+  })
+}
+
+const getArticleChannel = () => {
+  return request({
+    method: 'GET',
+    url: '/mp/v1_0/channels'
   })
 }
 
 export {
-  getArticleList
+  getArticleList,
+  getArticleChannel
 }

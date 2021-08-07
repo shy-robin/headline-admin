@@ -7,28 +7,33 @@
           <el-breadcrumb-item>内容管理</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <el-form ref="form" :model="form" label-width="40px" size='small'>
+      <el-form ref="form" label-width="40px" size='small'>
         <el-form-item label="状态">
-          <el-radio-group v-model="form.resource">
-            <el-radio label="全部"></el-radio>
-            <el-radio label="草稿"></el-radio>
-            <el-radio label="待审核"></el-radio>
-            <el-radio label="审核通过"></el-radio>
-            <el-radio label="审核失败"></el-radio>
-            <el-radio label="已删除"></el-radio>
+          <el-radio-group v-model="status">
+            <el-radio :label="null">全部</el-radio>
+            <el-radio :label="0">草稿</el-radio>
+            <el-radio :label="1">待审核</el-radio>
+            <el-radio :label="2">审核通过</el-radio>
+            <el-radio :label="3">审核失败</el-radio>
+            <el-radio :label="4">已删除</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+          <el-select v-model="channelId">
+            <el-option label="全部" :value="null"></el-option>
+            <el-option
+              v-for="(item, index) in channels" :key="index"
+              :label="item.name"
+              :value="item.id"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="value2"
+            v-model="dateRange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
             type="datetimerange"
-            :picker-options="pickerOptions"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -36,7 +41,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">筛选</el-button>
+          <el-button type="primary" @click="loadArticleList(1)">筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -117,22 +122,12 @@
 </template>
 
 <script>
-import { getArticleList } from 'api/article.js'
+import { getArticleList, getArticleChannel } from 'api/article.js'
 
 export default {
   name: 'ArticleIndex',
   data() {
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
       articleList: [], // 文章列表
       articleStatus: [ // 文章状态
         { text: '草稿', type: 'warning' }, // status: 0
@@ -142,19 +137,39 @@ export default {
         { text: '已删除', type: 'info' } // status: 4
       ],
       totalCount: 0, // 文章总数
-      perPage: 10 // 每页多少条
+      perPage: 10, // 默认每页 10 条
+      status: null, // 默认查询所有状态
+      channelId: null, // 默认查询所有频道
+      channels: [], // 频道
+      dateRange: [] // 日期范围
     }
   },
   created() {
-    this.loadArticleList(1, this.perPage)
+    this.loadArticleChannel()
+    this.loadArticleList(1)
   },
   methods: {
-    async loadArticleList(page, perPage) {
+    async loadArticleList(page) {
       try {
-        const res = await getArticleList(page, perPage)
+        const res = await getArticleList({
+          page: page, // 查询第几页
+          per_page: this.perPage, // 每页多少条
+          status: this.status, // 查询哪种文章状态
+          channel_id: this.channelId, // 查询哪个频道
+          begin_pubdate: this.dateRange ? this.dateRange[0] : null, // 开始日期
+          end_pubdate: this.dateRange ? this.dateRange[1] : null // 结束日期
+        })
         const { results, total_count: totalCount } = res.data.data
         this.articleList = results
         this.totalCount = totalCount
+      } catch (ex) {
+        console.log(ex)
+      }
+    },
+    async loadArticleChannel() {
+      try {
+        const res = await getArticleChannel()
+        this.channels = res.data.data.channels
       } catch (ex) {
         console.log(ex)
       }
