@@ -66,6 +66,7 @@
           <template slot-scope="scope">
             <el-image
               :src="scope.row.cover.images[0]"
+              :preview-src-list="[scope.row.cover.images[0]]"
               class="article-cover"
               fit="cover"
               lazy
