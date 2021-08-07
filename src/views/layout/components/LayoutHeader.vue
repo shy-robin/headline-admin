@@ -10,10 +10,11 @@
     <div class="right">
       <el-dropdown>
         <div class="el-dropdown-link">
-          <img
+          <el-image
             class="avatar"
+            fit="cover"
             :src="userInfo.photo"
-          >
+          ></el-image>
           <span>
             {{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>

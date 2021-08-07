@@ -59,14 +59,24 @@
           label="封面"
         >
           <template slot-scope="scope">
-            <img
+            <el-image
+              :src="scope.row.cover.images[0]"
+              class="article-cover"
+              fit="cover"
+              lazy
+            >
+              <div slot="placeholder" class="image-slot">
+                加载中...
+              </div>
+            </el-image>
+            <!-- <img
               v-if="scope.row.cover.images[0]"
               class="article-cover"
               :src="scope.row.cover.images[0]">
             <img
               v-else
               class="article-cover"
-              src="./no-cover.png">
+              src="./no-cover.png"> -->
           </template>
         </el-table-column>
         <el-table-column
@@ -191,7 +201,9 @@ export default {
   }
   .article-cover {
     width: 100px;
-    background-size: cover;
+    .image-slot {
+      text-align: center;
+    }
   }
 }
 </style>
