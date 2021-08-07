@@ -41,7 +41,11 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="loadArticleList(1)">筛选</el-button>
+          <el-button
+            type="primary"
+            :disabled="isLoading"
+            @click="loadArticleList(1)"
+          >筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -53,6 +57,7 @@
         :data="articleList"
         border
         size='medium'
+        v-loading='isLoading'
       >
         <el-table-column
           prop="date"
@@ -125,6 +130,7 @@
         @current-change="onCurrentChange"
         :total="totalCount"
         :page-size="perPage"
+        :disabled='isLoading'
       >
       </el-pagination>
     </el-card>
@@ -151,7 +157,8 @@ export default {
       status: null, // 默认查询所有状态
       channelId: null, // 默认查询所有频道
       channels: [], // 频道
-      dateRange: [] // 日期范围
+      dateRange: [], // 日期范围
+      isLoading: true // 是否在加载中
     }
   },
   created() {
@@ -160,6 +167,8 @@ export default {
   },
   methods: {
     async loadArticleList(page) {
+      this.isLoading = true // 开启 loading
+
       try {
         const res = await getArticleList({
           page: page, // 查询第几页
@@ -175,6 +184,8 @@ export default {
       } catch (ex) {
         console.log(ex)
       }
+
+      this.isLoading = false // 关闭 loading
     },
     async loadArticleChannel() {
       try {
