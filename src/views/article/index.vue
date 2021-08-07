@@ -42,26 +42,65 @@
     </el-card>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>根据筛选条件共查询到 46777 条结果</span>
+        <span>根据筛选条件共查询到 {{ totalCount }} 条结果</span>
       </div>
       <el-table
-        :data="tableData"
+        :data="articleList"
         border
         size='medium'
-        style="width: 100%">
+      >
         <el-table-column
           prop="date"
-          label="日期"
-          width="180">
+          label="封面"
+        >
+          <template slot-scope="scope">
+            <img
+              v-if="scope.row.cover.images[0]"
+              class="article-cover"
+              :src="scope.row.cover.images[0]">
+            <img
+              v-else
+              class="article-cover"
+              src="./no-cover.png">
+          </template>
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="姓名"
-          width="180">
+          prop="title"
+          label="标题"
+        >
+        </el-table-column>
+        <el-table-column
+          label="状态"
+        >
+        <!-- 如果要在自定义模板中获取当前遍历项的数据，则需要在 template 中定义 slot-scope='xxx' -->
+          <template slot-scope="scope">
+            <el-tag
+              size="medium"
+              :type="articleStatus[scope.row.status].type"
+            >{{ articleStatus[scope.row.status].text }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="pubdate"
+          label="发布时间">
         </el-table-column>
         <el-table-column
           prop="address"
-          label="地址">
+          label="操作">
+          <template>
+            <el-button
+              size="mini"
+              type='primary'
+              icon='el-icon-edit'
+              circle
+            ></el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              icon='el-icon-delete'
+              circle
+            ></el-button>
+          </template>
         </el-table-column>
       </el-table>
       <el-pagination
@@ -75,6 +114,8 @@
 </template>
 
 <script>
+import { getArticleList } from 'api/article.js'
+
 export default {
   name: 'ArticleIndex',
   data() {
@@ -89,28 +130,29 @@ export default {
         resource: '',
         desc: ''
       },
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ]
+      articleList: [], // 文章列表
+      articleStatus: [ // 文章状态
+        { text: '草稿', type: 'warning' }, // status: 0
+        { text: '待审核', type: '' }, // status: 1
+        { text: '审核通过', type: 'success' }, // status: 2
+        { text: '审核失败', type: 'danger' }, // status: 3
+        { text: '已删除', type: 'info' } // status: 4
+      ],
+      totalCount: 0 // 文章总数
+    }
+  },
+  created() {
+    this.loadArticleList()
+  },
+  methods: {
+    async loadArticleList() {
+      try {
+        const res = await getArticleList()
+        this.articleList = res.data.data.results
+        this.totalCount = res.data.data.total_count
+      } catch (ex) {
+        console.log(ex)
+      }
     }
   }
 }
@@ -123,6 +165,10 @@ export default {
   }
   .pagination {
     padding-top: 20px;
+  }
+  .article-cover {
+    width: 100px;
+    background-size: cover;
   }
 }
 </style>
