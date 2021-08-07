@@ -106,8 +106,11 @@
       <el-pagination
         class="pagination"
         background
-        layout="prev, pager, next"
-        :total="100">
+        layout="prev, pager, next, jumper"
+        @current-change="onCurrentChange"
+        :total="totalCount"
+        :page-size="perPage"
+      >
       </el-pagination>
     </el-card>
   </div>
@@ -138,21 +141,26 @@ export default {
         { text: '审核失败', type: 'danger' }, // status: 3
         { text: '已删除', type: 'info' } // status: 4
       ],
-      totalCount: 0 // 文章总数
+      totalCount: 0, // 文章总数
+      perPage: 10 // 每页多少条
     }
   },
   created() {
-    this.loadArticleList()
+    this.loadArticleList(1, this.perPage)
   },
   methods: {
-    async loadArticleList() {
+    async loadArticleList(page, perPage) {
       try {
-        const res = await getArticleList()
-        this.articleList = res.data.data.results
-        this.totalCount = res.data.data.total_count
+        const res = await getArticleList(page, perPage)
+        const { results, total_count: totalCount } = res.data.data
+        this.articleList = results
+        this.totalCount = totalCount
       } catch (ex) {
         console.log(ex)
       }
+    },
+    onCurrentChange(page) {
+      this.loadArticleList(page, this.perPage)
     }
   }
 }
