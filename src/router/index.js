@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from 'views/login/index.vue'
+import Login from 'views/login/'
 
 Vue.use(VueRouter)
 
@@ -15,12 +15,17 @@ const routes = [
     // 所以如果有默认子路由，就不要给父路由设置 name 属性，否则会有警告且无法正常显示路由
     path: '/',
     // name: 'layout',
-    component: () => import('views/layout/index.vue'),
+    component: () => import('views/layout/'),
     children: [
       {
         path: '', // path 为空，表示作为默认子路由渲染
         name: 'home',
-        component: () => import('views/home/index.vue')
+        component: () => import('views/home/')
+      },
+      {
+        path: '/article',
+        name: 'article',
+        component: () => import('views/article/')
       }
     ]
   }
