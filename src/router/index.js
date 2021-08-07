@@ -30,4 +30,21 @@ const router = new VueRouter({
   routes
 })
 
+// 路由导航守卫，所有页面的路由跳转都会经过这里
+// to: 要去的路由信息
+// from: 来自哪里的路由信息
+// next: 放行方法
+router.beforeEach((to, from, next) => {
+  const token = window.localStorage.getItem('user')
+  if (to.name === 'login') { // 如果要跳转到登录页，直接放行
+    next()
+  } else {
+    if (token) { // 如果 token 存在，直接放行
+      next()
+    } else { // 否则，跳转到登录页
+      next({ name: 'login' })
+    }
+  }
+})
+
 export default router
