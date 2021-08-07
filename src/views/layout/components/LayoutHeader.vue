@@ -20,7 +20,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>设置</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item @click.native="onLogout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -54,6 +54,16 @@ export default {
     foldMenu() {
       this.isCollapse = !this.isCollapse
       EventBus.$emit('foldMenu')
+    },
+    async onLogout() {
+      try {
+        await this.$warningBox('确认退出吗？', '提示')
+        window.localStorage.removeItem('user') // 删除 token
+        this.$router.push({ name: 'login' }) // 跳转到登录页
+        this.$msgSuccess('退出成功！')
+      } catch (ex) {
+        this.$msgNormal('已取消操作！')
+      }
     }
   }
 }
