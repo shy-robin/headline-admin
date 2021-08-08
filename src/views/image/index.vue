@@ -7,7 +7,11 @@
           <el-breadcrumb-item>素材管理</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <el-radio-group v-model="isCollect" size="mini">
+      <el-radio-group
+        v-model="isCollect"
+        size="mini"
+        @change='onLabelChange'
+      >
         <el-radio-button :label="false">全部</el-radio-button>
         <el-radio-button :label="true">收藏</el-radio-button>
       </el-radio-group>
@@ -28,8 +32,10 @@
       <el-pagination
         class="pagination"
         background
+        :current-page.sync="page"
+        @current-change="loadImageList(page)"
         layout="prev, pager, next"
-        :total="total">
+        :total="totalCount">
       </el-pagination>
     </el-card>
   </div>
@@ -45,7 +51,8 @@ export default {
       isCollect: false, // 默认显示全部图片
       perPage: 10, // 默认每页请求 10 张
       imageList: [], // 图片列表
-      totalCount: 0 // 图片总数
+      totalCount: 0, // 图片总数
+      page: 1 // 当前第几页，默认为第 1 页
     }
   },
   created() {
@@ -53,14 +60,22 @@ export default {
   },
   methods: {
     async loadImageList(page) {
-      const res = await getImageList({
-        page,
-        collect: this.isCollect,
-        per_page: this.perPage
-      })
-      const { results: imageList, total_count: totalCount } = res.data.data
-      this.imageList = imageList
-      this.totalCount = totalCount
+      try {
+        const res = await getImageList({
+          page,
+          collect: this.isCollect,
+          per_page: this.perPage
+        })
+        const { results: imageList, total_count: totalCount } = res.data.data
+        this.imageList = imageList
+        this.totalCount = totalCount
+      } catch (ex) {
+        console.log(ex)
+      }
+    },
+    onLabelChange(isCollect) {
+      this.isCollect = isCollect
+      this.loadImageList(this.page)
     }
   }
 }
