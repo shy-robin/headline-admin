@@ -22,8 +22,20 @@ const deleteArticle = articleId => {
   })
 }
 
+const publishArticle = (data, draft) => {
+  return request({
+    method: 'POST',
+    url: '/mp/v1_0/articles',
+    params: {
+      draft // 是否存入草稿
+    },
+    data // 请求体数据
+  })
+}
+
 export {
   getArticleList,
   getArticleChannel,
-  deleteArticle
+  deleteArticle,
+  publishArticle
 }
