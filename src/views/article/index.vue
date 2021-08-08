@@ -108,7 +108,7 @@
         <el-table-column
           prop="address"
           label="操作">
-          <template>
+          <template slot-scope="scope">
             <el-button
               size="mini"
               type='primary'
@@ -119,6 +119,7 @@
               size="mini"
               type="danger"
               icon='el-icon-delete'
+              @click="onDelete(scope.row.id)"
               circle
             ></el-button>
           </template>
@@ -129,6 +130,7 @@
         background
         layout="prev, pager, next, jumper"
         @current-change="onCurrentChange"
+        :current-page.sync="currentPage"
         :total="totalCount"
         :page-size="perPage"
         :disabled='isLoading'
@@ -139,7 +141,11 @@
 </template>
 
 <script>
-import { getArticleList, getArticleChannel } from 'api/article.js'
+import {
+  getArticleList,
+  getArticleChannel,
+  deleteArticle
+} from 'api/article.js'
 
 export default {
   name: 'ArticleIndex',
@@ -159,7 +165,8 @@ export default {
       channelId: null, // 默认查询所有频道
       channels: [], // 频道
       dateRange: [], // 日期范围
-      isLoading: true // 是否在加载中
+      isLoading: true, // 是否在加载中
+      currentPage: 1 // 当前在第几页
     }
   },
   created() {
@@ -172,7 +179,7 @@ export default {
 
       try {
         const res = await getArticleList({
-          page: page, // 查询第几页
+          page, // 查询第几页
           per_page: this.perPage, // 每页多少条
           status: this.status, // 查询哪种文章状态
           channel_id: this.channelId, // 查询哪个频道
@@ -198,6 +205,16 @@ export default {
     },
     onCurrentChange(page) {
       this.loadArticleList(page, this.perPage)
+    },
+    async onDelete(articleId) {
+      try { // 确认删除
+        await this.$warningBox('确定删除该文章吗？', '提示')
+        await deleteArticle(articleId.toString())
+        this.loadArticleList(this.currentPage) // 删除成功后，刷新当前页
+        this.$msgSuccess('删除成功！')
+      } catch (ex) { // 取消删除
+        this.$msgNormal('已取消操作！')
+      }
     }
   }
 }

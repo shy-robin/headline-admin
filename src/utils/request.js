@@ -1,8 +1,22 @@
 import axios from 'axios'
+import JSONBig from 'json-bigint'
 
 // 创建一个 axios 实例
 const request = axios.create({
-  baseURL: 'http://api-toutiao-web.itheima.net/'
+  baseURL: 'http://api-toutiao-web.itheima.net/',
+  // 定义 axios 对后端返回的原始数据的处理
+  transformResponse: [
+    // data 就是后端返回的原始数据（未经处理的 JSON 字符串）
+    function(data) {
+      // 后端返回的数据可能不是 JSON 格式的字符串，所以要做异常处理
+      try {
+        return JSONBig.parse(data)
+      } catch (err) {
+        // console.log('转换失败：', err)
+        return data
+      }
+    }
+  ]
 })
 
 // 添加请求拦截器

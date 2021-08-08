@@ -15,7 +15,15 @@ const getArticleChannel = () => {
   })
 }
 
+const deleteArticle = articleId => {
+  return request({
+    method: 'DELETE',
+    url: `/mp/v1_0/articles/${articleId}`
+  })
+}
+
 export {
   getArticleList,
-  getArticleChannel
+  getArticleChannel,
+  deleteArticle
 }
