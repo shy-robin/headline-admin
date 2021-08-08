@@ -9,11 +9,16 @@
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <el-form ref="form" :model="article" label-width="60px">
-        <el-form-item label="标题" required>
+      <el-form
+        ref="form"
+        :model="article"
+        label-width="60px"
+        :rules="rules"
+      >
+        <el-form-item label="标题" prop="title">
           <el-input v-model="article.title"></el-input>
         </el-form-item>
-        <el-form-item label="内容" required>
+        <el-form-item label="内容" prop="content">
           <el-tiptap
             v-model="article.content"
             :extensions="extensions"
@@ -30,7 +35,7 @@
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="频道" required>
+        <el-form-item label="频道" prop="channel_id">
           <el-select v-model="article.channel_id" placeholder="请选择频道">
             <el-option
               v-for="(item, index) in channels" :key='index'
@@ -164,7 +169,28 @@ export default {
         new Preview(),
         new Print(),
         new Fullscreen()
-      ]
+      ],
+      rules: {
+        title: [
+          { required: true, message: '请输入标题', trigger: 'blur' },
+          { min: 5, max: 30, message: '请输入 5-30 个字符', trigger: 'blur' }
+        ],
+        content: [
+          { required: true, message: '请输入内容', trigger: 'blur' },
+          {
+            validator(rule, value, callback) {
+              if (value === '<p></p>') {
+                callback(new Error('请输入内容'))
+              }
+              callback()
+            },
+            trigger: 'blur'
+          }
+        ],
+        channel_id: [
+          { required: true, message: '请选择频道', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -182,26 +208,30 @@ export default {
         console.log(ex)
       }
     },
-    async onPublish(draft) {
-      if (this.$route.query.id) { // 查询参数有 id，表示编辑文章页面
-        try {
-          await updateArticle(this.$route.query.id, this.article, draft)
-          this.$msgSuccess(`${draft ? '存入草稿' : '修改文章'}成功！`)
-          this.$router.push({ name: 'article' }) // 修改成功，跳转到文章列表
-        } catch (ex) {
-          this.$msgError(`${draft ? '存入草稿' : '修改文章'}失败！`)
-          console.log(ex)
+    onPublish(draft) {
+      const self = this
+      this.$refs.form.validate(async function(valid) {
+        if (!valid) return false
+        if (self.$route.query.id) { // 查询参数有 id，表示编辑文章页面
+          try {
+            await updateArticle(self.$route.query.id, self.article, draft)
+            self.$msgSuccess(`${draft ? '存入草稿' : '修改文章'}成功！`)
+            self.$router.push({ name: 'article' }) // 修改成功，跳转到文章列表
+          } catch (ex) {
+            self.$msgError(`${draft ? '存入草稿' : '修改文章'}失败！`)
+            console.log(ex)
+          }
+        } else { // 否则，表示发布文章页面
+          try {
+            await publishArticle(self.article, draft)
+            self.$msgSuccess(`${draft ? '存入草稿' : '发布文章'}成功！`)
+            self.$router.push({ name: 'article' }) // 发表成功，跳转到文章列表
+          } catch (ex) {
+            self.$msgError(`${draft ? '存入草稿' : '发布文章'}失败！`)
+            console.log(ex)
+          }
         }
-      } else { // 否则，表示发布文章页面
-        try {
-          await publishArticle(this.article, draft)
-          this.$msgSuccess(`${draft ? '存入草稿' : '发布文章'}成功！`)
-          this.$router.push({ name: 'article' }) // 发表成功，跳转到文章列表
-        } catch (ex) {
-          this.$msgError(`${draft ? '存入草稿' : '发布文章'}失败！`)
-          console.log(ex)
-        }
-      }
+      })
     },
     async loadArticleInfo() {
       try {
