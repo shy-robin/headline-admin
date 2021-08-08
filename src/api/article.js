@@ -33,9 +33,29 @@ const publishArticle = (data, draft) => {
   })
 }
 
+const getArticleInfo = articleId => {
+  return request({
+    method: 'GET',
+    url: `/mp/v1_0/articles/${articleId}`
+  })
+}
+
+const updateArticle = (articleId, data, draft) => {
+  return request({
+    method: 'PUT',
+    url: `/mp/v1_0/articles/${articleId}`,
+    params: {
+      draft
+    },
+    data
+  })
+}
+
 export {
   getArticleList,
   getArticleChannel,
   deleteArticle,
-  publishArticle
+  publishArticle,
+  getArticleInfo,
+  updateArticle
 }
