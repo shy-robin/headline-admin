@@ -14,7 +14,13 @@
           <el-input v-model="article.title"></el-input>
         </el-form-item>
         <el-form-item label="内容" required>
-          <el-input type="textarea" v-model="article.content"></el-input>
+          <el-tiptap
+            v-model="article.content"
+            :extensions="extensions"
+            lang="zh"
+            placeholder="请输入文章内容..."
+            :height="400"
+          />
         </el-form-item>
         <el-form-item label="封面">
           <el-radio-group v-model="article.cover.type">
@@ -52,8 +58,56 @@ import {
   updateArticle
 } from 'api/article.js'
 
+import { uploadImage } from 'api/image.js'
+
+import {
+  ElementTiptap,
+  // 需要的 extensions
+  Doc,
+  Text,
+  Paragraph,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Link,
+  Image,
+  Iframe,
+  CodeBlock,
+  Blockquote,
+  ListItem,
+  BulletList, // (与 ListItem 一起使用)
+  OrderedList, // (与 ListItem一起使用)
+  TodoItem,
+  TodoList, // (与 TodoItem 一起使用)
+  TextAlign,
+  LineHeight,
+  HorizontalRule,
+  HardBreak,
+  TrailingNode,
+  History,
+  Table, // (与 TableHeader, TableCell, TableRow 一起使用)
+  TableHeader,
+  TableCell,
+  TableRow,
+  FormatClear,
+  TextColor,
+  TextHighlight,
+  Preview,
+  Print,
+  Fullscreen,
+  FontType,
+  FontSize
+} from 'element-tiptap'
+
+import 'element-tiptap/lib/index.css'
+
 export default {
   name: 'PublishIndex',
+  components: {
+    'el-tiptap': ElementTiptap
+  },
   data() {
     return {
       article: {
@@ -65,7 +119,52 @@ export default {
         },
         channel_id: null // 文章频道，默认不选择
       },
-      channels: [] // 所有频道
+      channels: [], // 所有频道
+      extensions: [
+        new Doc(),
+        new Text(),
+        new Paragraph(),
+        new Heading({ level: 5 }), // 最多五级标题
+        new FontType(),
+        new FontSize(),
+        new Bold({ bubble: true }), // 在气泡菜单中渲染菜单按钮
+        new Underline({ bubble: true, menubar: false }), // 在气泡菜单而不在菜单栏中渲染菜单按钮
+        new Italic(),
+        new Strike(),
+        new ListItem(),
+        new BulletList(),
+        new OrderedList(),
+        new Link(),
+        new Image({
+          async uploadRequest(file) {
+            const fd = new FormData() // 创建一个 FormData 空对象
+            fd.append('image', file) // Body 需要 image 字段，对于 file 类型
+            const res = await uploadImage(fd)
+            return res.data.data.url // 返回图片地址
+          }
+        }),
+        new Iframe(),
+        new CodeBlock(),
+        new Blockquote(),
+        new TodoItem(),
+        new TodoList(),
+        new TextAlign(),
+        new LineHeight(),
+        new HorizontalRule(),
+        new HardBreak(),
+        new TrailingNode(),
+        new History(),
+        new Table(),
+        new TableHeader(),
+        new TableCell(),
+        new TableRow(),
+        new FormatClear(),
+        new TextColor(),
+        new TextHighlight(),
+        new Preview(),
+        new Print(),
+        new Fullscreen()
+      ]
     }
   },
   created() {
