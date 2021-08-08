@@ -23,9 +23,12 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道" required>
-          <el-select v-model="channels" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+          <el-select v-model="article.channelId" placeholder="请选择频道">
+            <el-option
+              v-for="(item, index) in channels" :key='index'
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -38,6 +41,8 @@
 </template>
 
 <script>
+import { getArticleChannel } from 'api/article.js'
+
 export default {
   name: 'PublishIndex',
   data() {
@@ -48,7 +53,22 @@ export default {
         cover: { // 文章封面
           type: 0, // 封面类型（-1: 自动，0: 无图，1: 单图，3: 三图）
           images: []
-        }
+        },
+        channelId: null // 文章频道，默认不选择
+      },
+      channels: [] // 所有频道
+    }
+  },
+  created() {
+    this.loadArticleChannel()
+  },
+  methods: {
+    async loadArticleChannel() {
+      try {
+        const res = await getArticleChannel()
+        this.channels = res.data.data.channels
+      } catch (ex) {
+        console.log(ex)
       }
     }
   }
