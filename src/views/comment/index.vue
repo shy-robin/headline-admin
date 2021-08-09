@@ -52,10 +52,13 @@
       <el-pagination
         style="margin-top: 20px;"
         background
-        layout="prev, pager, next, jumper"
+        layout="total, sizes, prev, pager, next, jumper"
         :total="totalCount"
+        :page-size.sync="pageSize"
         :current-page.sync="page"
+        :page-sizes="[10, 20, 30, 40, 50]"
         @current-change="loadArticleList(page)"
+        @size-change="loadArticleList(page)"
       >
       </el-pagination>
     </el-card>
@@ -72,7 +75,8 @@ export default {
     return {
       articleList: [], // 文章列表
       totalCount: 0, // 文章总数
-      page: 1 // 当前页
+      page: 1, // 当前页
+      pageSize: 10 // 每页多少条数据
     }
   },
   created() {
@@ -83,7 +87,8 @@ export default {
       try {
         const res = await getArticleList({
           response_type: 'comment',
-          page
+          page,
+          per_page: this.pageSize
         })
         const { results: articleList, total_count: totalCount } = res.data.data
         articleList.forEach(item => { // 给每条数据增加 disableSwitch 属性
