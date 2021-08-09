@@ -9,21 +9,21 @@
       </div>
       <el-row>
         <el-col :span="12">
-          <el-form ref="form" :model="settingForm" label-width="60px">
+          <el-form ref="form" :model="userProfile" label-width="60px">
             <el-form-item label="编号">
-              <el-input v-model="settingForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="昵称">
-              <el-input v-model="settingForm.name"></el-input>
+              <el-input disabled v-model="userProfile.id"></el-input>
             </el-form-item>
             <el-form-item label="手机">
-              <el-input v-model="settingForm.name"></el-input>
+              <el-input disabled v-model="userProfile.mobile"></el-input>
+            </el-form-item>
+            <el-form-item label="昵称">
+              <el-input v-model="userProfile.name"></el-input>
             </el-form-item>
             <el-form-item label="邮箱">
-              <el-input v-model="settingForm.name"></el-input>
+              <el-input v-model="userProfile.email"></el-input>
             </el-form-item>
             <el-form-item label="介绍">
-              <el-input type="textarea" v-model="settingForm.desc"></el-input>
+              <el-input type="textarea" v-model="userProfile.intro"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary">保存设置</el-button>
@@ -33,7 +33,7 @@
         <el-col :span="12" style="display:flex;justify-content:center;">
           <el-avatar
             :size="240"
-            src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+            :src="userProfile.photo"
           ></el-avatar>
         </el-col>
       </el-row>
@@ -42,12 +42,25 @@
 </template>
 
 <script>
+import { getUserProfile } from 'api/user.js'
+
 export default {
   name: 'SettingIndex',
   data() {
     return {
-      settingForm: {
-        name: ''
+      userProfile: {} // 用户信息
+    }
+  },
+  created() {
+    this.loadUserProfile()
+  },
+  methods: {
+    async loadUserProfile() {
+      try {
+        const res = await getUserProfile()
+        this.userProfile = res.data.data
+      } catch (ex) {
+        console.log(ex)
       }
     }
   }
