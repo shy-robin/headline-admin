@@ -44,12 +44,14 @@
               'iconfont icon-shoucang2' : 'iconfont icon-shoucang_quxiaoshoucang'"
               circle
               size="mini"
+              type="warning"
               :loading="item.isLoading"
               @click="onStar(!item.is_collected, item.id, index)"
             ></el-button>
             <el-button
               icon="iconfont icon-shanchu"
               circle
+              type="danger"
               size="mini"
               :loading="item.isLoading"
               @click="onDelete(item.id, index)"
