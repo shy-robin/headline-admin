@@ -39,15 +39,19 @@
             lazy
           ></el-image>
           <div class="image-operation">
-            <div class="star" @click="onStar(!item.is_collected, item.id)">
-              <i
-                :class="item.is_collected ?
-                'iconfont icon-shoucang2' : 'iconfont icon-shoucang_quxiaoshoucang'"
-              ></i>
-            </div>
-            <div class="delete" @click="onDelete(item.id)">
-              <i class="iconfont icon-shanchu"></i>
-            </div>
+            <el-button
+              :icon="item.is_collected ?
+              'iconfont icon-shoucang2' : 'iconfont icon-shoucang_quxiaoshoucang'"
+              circle
+              size="mini"
+              @click="onStar(!item.is_collected, item.id)"
+            ></el-button>
+            <el-button
+              icon="iconfont icon-shanchu"
+              circle
+              size="mini"
+              @click="onDelete(item.id)"
+            ></el-button>
           </div>
         </div>
         </el-col>
@@ -172,27 +176,10 @@ export default {
       position: relative;
       .image-operation {
         position: absolute;
-        width: 100%;
-        height: 35px;
         left: 0;
         right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.52);
-        display: flex;
-        justify-content: space-around;
-        align-items: stretch;
-        i {
-          font-size: 22px;
-        }
-        .star, .delete {
-          flex: 1;
-          cursor: pointer;
-          text-align: center;
-          line-height: 35px;
-        }
-        .star:hover, .delete:hover {
-          background-color: rgba(255, 255, 255, 0.72);
-        }
+        bottom: 10px;
+        justify-content: space-evenly;
         display: none;
       }
     }
