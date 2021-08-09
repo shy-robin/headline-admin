@@ -39,7 +39,7 @@
             lazy
           ></el-image>
           <div class="image-operation">
-            <div class="star" @click="onStar">
+            <div class="star" @click="onStar(!item.is_collected, item.id)">
               <i
                 :class="item.is_collected ?
                 'iconfont icon-shoucang2' : 'iconfont icon-shoucang_quxiaoshoucang'"
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { getImageList } from 'api/image.js'
+import { getImageList, starImage } from 'api/image.js'
 
 export default {
   name: 'ImageIndex',
@@ -136,8 +136,15 @@ export default {
       this.loadImageList(1)
       this.$msgError('图片尺寸过大！')
     },
-    onStar() {
-      alert('star')
+    async onStar(toStar, id) {
+      try {
+        await starImage({ collect: toStar }, id)
+        this.loadImageList(this.page)
+        this.$msgSuccess(`图片${toStar ? '收藏' : '取消收藏'}成功！`)
+      } catch (ex) {
+        console.log(ex)
+        this.$msgError(`图片${toStar ? '收藏' : '取消收藏'}成功！`)
+      }
     },
     onDelete() {
       alert('delete')

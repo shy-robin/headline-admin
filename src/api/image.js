@@ -18,7 +18,16 @@ const getImageList = params => {
   })
 }
 
+const starImage = (data, id) => {
+  return request({
+    method: 'PUT',
+    url: `/mp/v1_0/user/images/${id}`,
+    data
+  })
+}
+
 export {
   uploadImage,
-  getImageList
+  getImageList,
+  starImage
 }
