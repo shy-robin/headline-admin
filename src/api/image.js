@@ -26,8 +26,16 @@ const starImage = (data, id) => {
   })
 }
 
+const deleteImage = id => {
+  return request({
+    method: 'DELETE',
+    url: `/mp/v1_0/user/images/${id}`
+  })
+}
+
 export {
   uploadImage,
   getImageList,
-  starImage
+  starImage,
+  deleteImage
 }

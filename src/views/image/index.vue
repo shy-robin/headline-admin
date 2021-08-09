@@ -45,7 +45,7 @@
                 'iconfont icon-shoucang2' : 'iconfont icon-shoucang_quxiaoshoucang'"
               ></i>
             </div>
-            <div class="delete" @click="onDelete">
+            <div class="delete" @click="onDelete(item.id)">
               <i class="iconfont icon-shanchu"></i>
             </div>
           </div>
@@ -85,7 +85,11 @@
 </template>
 
 <script>
-import { getImageList, starImage } from 'api/image.js'
+import {
+  getImageList,
+  starImage,
+  deleteImage
+} from 'api/image.js'
 
 export default {
   name: 'ImageIndex',
@@ -146,8 +150,15 @@ export default {
         this.$msgError(`图片${toStar ? '收藏' : '取消收藏'}成功！`)
       }
     },
-    onDelete() {
-      alert('delete')
+    async onDelete(id) {
+      try {
+        await deleteImage(id)
+        this.loadImageList(this.page)
+        this.$msgSuccess('图片删除成功！')
+      } catch (ex) {
+        console.log(ex)
+        this.$msgError('图片删除失败！')
+      }
     }
   }
 }
