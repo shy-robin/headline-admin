@@ -26,16 +26,27 @@
       <el-row :gutter="20">
         <el-col
           v-for="(item, index) in imageList" :key="index"
-          class="image"
+          class="image-container"
           :lg="4" :md="6" :sm="8" :xs="12"
         >
+        <div class="image-wrapper">
           <el-image
+            class="image"
             style="height:150px;width:100%"
             :src="item.url"
             :preview-src-list="[item.url]"
             fit="fill"
             lazy
           ></el-image>
+          <div class="image-operation">
+            <div class="star" @click="onStar">
+              <i class="el-icon-star-off"></i>
+            </div>
+            <div class="delete" @click="onDelete">
+              <i class="el-icon-delete"></i>
+            </div>
+          </div>
+        </div>
         </el-col>
       </el-row>
       <el-pagination
@@ -121,6 +132,12 @@ export default {
       this.dialogVisible = false
       this.loadImageList(1)
       this.$msgError('图片尺寸过大！')
+    },
+    onStar() {
+      alert('star')
+    },
+    onDelete() {
+      alert('delete')
     }
   }
 }
@@ -128,8 +145,39 @@ export default {
 
 <style lang="scss" scoped>
 .image-container {
-  .image {
+  .image-container {
     padding-top: 10px;
+    .image-wrapper {
+      position: relative;
+      .image-operation {
+        position: absolute;
+        width: 100%;
+        height: 35px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.52);
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;
+        i {
+          font-size: 22px;
+        }
+        .star, .delete {
+          flex: 1;
+          cursor: pointer;
+          text-align: center;
+          line-height: 35px;
+        }
+        .star:hover, .delete:hover {
+          background-color: rgba(255, 255, 255, 0.72);
+        }
+        display: none;
+      }
+    }
+    .image-wrapper:hover .image-operation  {
+      display: flex;
+    }
   }
   .pagination {
     padding-top: 10px;
