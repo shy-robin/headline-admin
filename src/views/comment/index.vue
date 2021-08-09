@@ -28,17 +28,23 @@
         </el-table-column>
         <el-table-column
           prop="comment_status"
-          label="状态"
+          label="评论状态"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.comment_status ? '正常' : '异常' }}</span>
+            <span>{{ scope.row.comment_status ? '正常' : '关闭' }}</span>
           </template>
         </el-table-column>
         <el-table-column
           label="操作"
         >
-          <template>
-            <el-button type="danger" size="mini">关闭评论</el-button>
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.comment_status"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              @change="onSwitch(scope.row.id, scope.row.comment_status)"
+            >
+            </el-switch>
           </template>
         </el-table-column>
       </el-table>
@@ -57,48 +63,12 @@
 
 <script>
 import { getArticleList } from 'api/article.js'
+import { updateCommentStatus } from 'api/comment.js'
 
 export default {
   name: 'CommentIndex',
   data() {
     return {
-      commentData: [
-        {
-          title: 'tafds',
-          allComments: 111,
-          fansComments: 34,
-          status: 'ok',
-          operation: 'button'
-        },
-        {
-          title: 'tafds',
-          allComments: 111,
-          fansComments: 34,
-          status: 'ok',
-          operation: 'button'
-        },
-        {
-          title: 'tafds',
-          allComments: 111,
-          fansComments: 34,
-          status: 'ok',
-          operation: 'button'
-        },
-        {
-          title: 'tafds',
-          allComments: 111,
-          fansComments: 34,
-          status: 'ok',
-          operation: 'button'
-        },
-        {
-          title: 'tafds',
-          allComments: 111,
-          fansComments: 34,
-          status: 'ok',
-          operation: 'button'
-        }
-      ],
       articleList: [], // 文章列表
       totalCount: 0, // 文章总数
       page: 1 // 当前页
@@ -118,6 +88,16 @@ export default {
         this.articleList = articleList
         this.totalCount = totalCount
       } catch (ex) {
+        console.log(ex)
+      }
+    },
+    async onSwitch(articleId, allowComment) {
+      try {
+        await updateCommentStatus(articleId.toString(), allowComment)
+        this.loadArticleList(this.page)
+        this.$msgSuccess(`${allowComment ? '开启评论' : '关闭评论'}成功！`)
+      } catch (ex) {
+        this.$msgError(`${allowComment ? '开启评论' : '关闭评论'}失败！`)
         console.log(ex)
       }
     }
