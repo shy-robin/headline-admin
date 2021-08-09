@@ -30,9 +30,10 @@
           :lg="4" :md="6" :sm="8" :xs="12"
         >
           <el-image
+            style="height:150px;width:100%"
             :src="item.url"
             :preview-src-list="[item.url]"
-            fit="cover"
+            fit="fill"
             lazy
           ></el-image>
         </el-col>
@@ -79,7 +80,7 @@ export default {
 
     return {
       isCollect: false, // 默认显示全部图片
-      perPage: 10, // 默认每页请求 10 张
+      perPage: 12, // 默认每页请求 10 张
       imageList: [], // 图片列表
       totalCount: 0, // 图片总数
       page: 1, // 当前第几页，默认为第 1 页
