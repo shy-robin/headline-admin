@@ -44,13 +44,15 @@
               'iconfont icon-shoucang2' : 'iconfont icon-shoucang_quxiaoshoucang'"
               circle
               size="mini"
-              @click="onStar(!item.is_collected, item.id)"
+              :loading="item.isLoading"
+              @click="onStar(!item.is_collected, item.id, index)"
             ></el-button>
             <el-button
               icon="iconfont icon-shanchu"
               circle
               size="mini"
-              @click="onDelete(item.id)"
+              :loading="item.isLoading"
+              @click="onDelete(item.id, index)"
             ></el-button>
           </div>
         </div>
@@ -124,6 +126,9 @@ export default {
           per_page: this.perPage
         })
         const { results: imageList, total_count: totalCount } = res.data.data
+        imageList.forEach(item => { // 给每张图片都添加一个 isLoading 属性
+          item.isLoading = false
+        })
         this.imageList = imageList
         this.totalCount = totalCount
       } catch (ex) {
@@ -144,23 +149,29 @@ export default {
       this.loadImageList(1)
       this.$msgError('图片尺寸过大！')
     },
-    async onStar(toStar, id) {
+    async onStar(toStar, id, index) {
+      this.imageList[index].isLoading = true
       try {
         await starImage({ collect: toStar }, id)
         this.loadImageList(this.page)
+        this.imageList[index].isLoading = false
         this.$msgSuccess(`图片${toStar ? '收藏' : '取消收藏'}成功！`)
       } catch (ex) {
         console.log(ex)
+        this.imageList[index].isLoading = false
         this.$msgError(`图片${toStar ? '收藏' : '取消收藏'}成功！`)
       }
     },
-    async onDelete(id) {
+    async onDelete(id, index) {
+      this.imageList[index].isLoading = true
       try {
         await deleteImage(id)
         this.loadImageList(this.page)
+        this.imageList[index].isLoading = false
         this.$msgSuccess('图片删除成功！')
       } catch (ex) {
         console.log(ex)
+        this.imageList[index].isLoading = false
         this.$msgError('图片删除失败！')
       }
     }
