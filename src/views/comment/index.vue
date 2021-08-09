@@ -8,7 +8,7 @@
         </el-breadcrumb>
       </div>
       <el-table
-        :data="commentData"
+        :data="articleList"
         style="width: 100%"
         border
       >
@@ -18,31 +18,33 @@
         >
         </el-table-column>
         <el-table-column
-          prop="allComments"
+          prop="total_comment_count"
           label="总评论数"
         >
         </el-table-column>
         <el-table-column
-          prop="fansComments"
+          prop="fans_comment_count"
           label="粉丝评论数">
         </el-table-column>
         <el-table-column
-          prop="status"
-          label="状态">
+          prop="comment_status"
+          label="状态"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.comment_status ? '正常' : '异常' }}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="operation"
-          label="操作">
+          label="操作"
+        >
+          <template>
+            <el-button type="danger" size="mini">关闭评论</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <el-pagination
         style="margin-top: 20px;"
         background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
         layout="prev, pager, next, jumper"
         :total="400">
       </el-pagination>
@@ -51,6 +53,8 @@
 </template>
 
 <script>
+import { getArticleList } from 'api/article.js'
+
 export default {
   name: 'CommentIndex',
   data() {
@@ -91,7 +95,25 @@ export default {
           status: 'ok',
           operation: 'button'
         }
-      ]
+      ],
+      articleList: [] // 文章列表
+    }
+  },
+  created() {
+    this.loadArticleList()
+  },
+  methods: {
+    async loadArticleList(page) {
+      try {
+        const res = await getArticleList({
+          response_type: 'comment',
+          page
+        })
+        const { results: articleList } = res.data.data
+        this.articleList = articleList
+      } catch (ex) {
+        console.log(ex)
+      }
     }
   }
 }
