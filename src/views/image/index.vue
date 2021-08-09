@@ -110,7 +110,7 @@ export default {
     },
     onLabelChange(isCollect) {
       this.isCollect = isCollect
-      this.loadImageList(this.page)
+      this.loadImageList(1)
     },
     onUploadSuccess() {
       this.dialogVisible = false // 关闭上传窗口
