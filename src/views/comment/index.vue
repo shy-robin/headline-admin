@@ -46,7 +46,10 @@
         style="margin-top: 20px;"
         background
         layout="prev, pager, next, jumper"
-        :total="400">
+        :total="totalCount"
+        :current-page.sync="page"
+        @current-change="loadArticleList(page)"
+      >
       </el-pagination>
     </el-card>
   </div>
@@ -96,7 +99,9 @@ export default {
           operation: 'button'
         }
       ],
-      articleList: [] // 文章列表
+      articleList: [], // 文章列表
+      totalCount: 0, // 文章总数
+      page: 1 // 当前页
     }
   },
   created() {
@@ -109,8 +114,9 @@ export default {
           response_type: 'comment',
           page
         })
-        const { results: articleList } = res.data.data
+        const { results: articleList, total_count: totalCount } = res.data.data
         this.articleList = articleList
+        this.totalCount = totalCount
       } catch (ex) {
         console.log(ex)
       }
