@@ -40,10 +40,13 @@
           ></el-image>
           <div class="image-operation">
             <div class="star" @click="onStar">
-              <i class="el-icon-star-off"></i>
+              <i
+                :class="item.is_collected ?
+                'iconfont icon-shoucang2' : 'iconfont icon-shoucang_quxiaoshoucang'"
+              ></i>
             </div>
             <div class="delete" @click="onDelete">
-              <i class="el-icon-delete"></i>
+              <i class="iconfont icon-shanchu"></i>
             </div>
           </div>
         </div>
