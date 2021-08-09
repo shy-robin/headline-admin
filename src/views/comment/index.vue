@@ -42,7 +42,8 @@
               v-model="scope.row.comment_status"
               active-color="#13ce66"
               inactive-color="#ff4949"
-              @change="onSwitch(scope.row.id, scope.row.comment_status)"
+              :disabled="scope.row.disableSwitch"
+              @change="onSwitch(scope.row.id, scope.row.comment_status, scope.$index)"
             >
             </el-switch>
           </template>
@@ -85,19 +86,25 @@ export default {
           page
         })
         const { results: articleList, total_count: totalCount } = res.data.data
+        articleList.forEach(item => { // 给每条数据增加 disableSwitch 属性
+          item.disableSwitch = false
+        })
         this.articleList = articleList
         this.totalCount = totalCount
       } catch (ex) {
         console.log(ex)
       }
     },
-    async onSwitch(articleId, allowComment) {
+    async onSwitch(articleId, allowComment, index) {
+      this.articleList[index].disableSwitch = true // 禁用开关
       try {
         await updateCommentStatus(articleId.toString(), allowComment)
         this.loadArticleList(this.page)
         this.$msgSuccess(`${allowComment ? '开启评论' : '关闭评论'}成功！`)
+        this.articleList[index].disableSwitch = false // 解禁开关
       } catch (ex) {
         this.$msgError(`${allowComment ? '开启评论' : '关闭评论'}失败！`)
+        this.articleList[index].disableSwitch = false // 解禁开关
         console.log(ex)
       }
     }
