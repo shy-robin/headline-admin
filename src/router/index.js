@@ -41,6 +41,11 @@ const routes = [
         path: '/comment',
         name: 'comment',
         component: () => import('views/comment/')
+      },
+      {
+        path: '/setting',
+        name: 'setting',
+        component: () => import('views/setting/')
       }
     ]
   }
