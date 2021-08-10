@@ -68,13 +68,14 @@
       <el-button
         style="margin-top:20px;width:100%;"
         type="primary"
+        @click="onUpdateAvatar"
       >保存头像</el-button>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUserProfile } from 'api/user.js'
+import { getUserProfile, uploadAvatar } from 'api/user.js'
 import 'cropperjs/dist/cropper.css'
 import Cropper from 'cropperjs'
 
@@ -129,6 +130,38 @@ export default {
         await this.$warningBox('确定退出编辑吗？', '提示')
         done()
       } catch {}
+    },
+    onUpdateAvatar() {
+      // 1. 获取到裁剪的图片数据
+      this.cropper.getCroppedCanvas().toBlob(async file => {
+        const fd = new FormData()
+        fd.append('photo', file)
+        // 2. 向服务器上传图片
+        try {
+          // 接口要求请求头有 'Content-Type': 'multipart/form-data'
+          // 这个 header 不需要手动设置，只需要 data 是一个 FormData 对象
+          // 且对象里面有后端对应的字段即可
+          await uploadAvatar(fd)
+
+          // 3. 关闭窗口
+          this.dialogVisible = false
+
+          // 4. 消息提示
+          this.$msgSuccess('头像修改成功！')
+
+          // 5. 将头像直接设置为 blob 数据，这样就不用再向服务器发送更新请求了
+          const blobData = window.URL.createObjectURL(file)
+          this.userProfile.photo = blobData
+        } catch (ex) {
+          console.log(ex)
+
+          // 3. 关闭窗口
+          this.dialogVisible = false
+
+          // 4. 消息提示
+          this.$msgError('图片尺寸过大，头像修改失败！')
+        }
+      })
     }
   }
 }

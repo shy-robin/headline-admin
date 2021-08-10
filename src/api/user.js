@@ -24,7 +24,17 @@ const getUserProfile = () => {
   })
 }
 
+// 上传用户头像
+const uploadAvatar = data => {
+  return request({
+    method: 'PATCH',
+    url: '/mp/v1_0/user/photo',
+    data
+  })
+}
+
 export {
   login,
-  getUserProfile
+  getUserProfile,
+  uploadAvatar
 }
