@@ -33,8 +33,18 @@ const uploadAvatar = data => {
   })
 }
 
+// 更新用户信息
+const updateProfile = data => {
+  return request({
+    method: 'PATCH',
+    url: '/mp/v1_0/user/profile',
+    data
+  })
+}
+
 export {
   login,
   getUserProfile,
-  uploadAvatar
+  uploadAvatar,
+  updateProfile
 }

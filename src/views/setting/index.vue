@@ -26,7 +26,7 @@
               <el-input type="textarea" v-model="userProfile.intro"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary">保存设置</el-button>
+              <el-button type="primary" @click="onSaveProfile">保存设置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -76,7 +76,11 @@
 </template>
 
 <script>
-import { getUserProfile, uploadAvatar } from 'api/user.js'
+import {
+  getUserProfile,
+  uploadAvatar,
+  updateProfile
+} from 'api/user.js'
 import 'cropperjs/dist/cropper.css'
 import Cropper from 'cropperjs'
 
@@ -170,6 +174,11 @@ export default {
           this.isLoading = false // 加载完成
         }
       })
+    },
+    async onSaveProfile() {
+      const { name, intro, email } = this.userProfile
+      const res = await updateProfile({ name, intro, email })
+      console.log(res)
     }
   }
 }
