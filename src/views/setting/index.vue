@@ -55,6 +55,7 @@
       :visible.sync="dialogVisible"
       :append-to-body="true"
       @opened="onDialogOpened"
+      @closed="onDialogClosed"
     >
       <img
         :src="previewURL"
@@ -76,7 +77,8 @@ export default {
     return {
       userProfile: {}, // 用户信息
       dialogVisible: false, // 图片预览窗口是否可见
-      previewURL: '' // 预览链接
+      previewURL: '', // 预览链接
+      cropper: null // 图片裁切器实例
     }
   },
   created() {
@@ -103,7 +105,7 @@ export default {
     },
     onDialogOpened() {
       const image = this.$refs['preview-image']
-      const cropper = new Cropper(image, {
+      this.cropper = new Cropper(image, {
         aspectRatio: 16 / 9,
         crop(event) {
           console.log(event.detail.x)
@@ -115,7 +117,12 @@ export default {
           console.log(event.detail.scaleY)
         }
       })
-      console.log(cropper)
+    },
+    onDialogClosed() {
+      // 解决选择图片，裁切器的图片没有更新的问题
+      // 原因：cropper 实例没有改变，图片就不会改变
+      // 方式一：在dialog关闭后，销毁 cropper 实例
+      this.cropper.destroy()
     }
   }
 }
