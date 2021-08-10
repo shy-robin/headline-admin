@@ -8,9 +8,18 @@
 <script>
 // 2. 引入 echarts
 import * as echarts from 'echarts'
+import { getFansStatistic } from 'api/fans.js'
 
 export default {
   name: 'FansChart',
+  data() {
+    return {
+      statistic: {} // 统计数据
+    }
+  },
+  created() {
+    this.loadFansStatistic()
+  },
   mounted() {
     // 3. 基于准备好的 dom，初始化 echarts 实例
     const myChart = echarts.init(this.$refs.main)
@@ -36,6 +45,12 @@ export default {
     }
     // 5. 使用刚指定的配置项和数据显示图表
     myChart.setOption(option)
+  },
+  methods: {
+    async loadFansStatistic() {
+      const res = await getFansStatistic()
+      console.log(res)
+    }
   }
 }
 </script>

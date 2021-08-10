@@ -8,6 +8,14 @@ const getFansList = params => {
   })
 }
 
+const getFansStatistic = () => {
+  return request({
+    method: 'GET',
+    url: '/mp/v1_0/statistics/followers'
+  })
+}
+
 export {
-  getFansList
+  getFansList,
+  getFansStatistic
 }
