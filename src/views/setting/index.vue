@@ -33,9 +33,13 @@
             <el-form-item>
               <el-button
                 type="primary"
-                :loading="saveLoading"
+                :loading="buttonLoading"
                 @click="onSaveProfile"
               >保存设置</el-button>
+              <el-button
+                @click="onReset"
+                :loading="buttonLoading"
+              >重置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -120,7 +124,7 @@ export default {
           }
         ]
       },
-      saveLoading: false // 保存设置按钮是否 loading
+      buttonLoading: false // 保存设置按钮和重置按钮是否 loading
     }
   },
   created() {
@@ -128,11 +132,14 @@ export default {
   },
   methods: {
     async loadUserProfile() {
+      this.buttonLoading = true
       try {
         const res = await getUserProfile()
         this.userProfile = res.data.data
+        this.buttonLoading = false
       } catch (ex) {
         console.log(ex)
+        this.buttonLoading = false
       }
     },
     onFileChange() {
@@ -207,8 +214,6 @@ export default {
       this.$refs.userProfile.validate(async valid => {
         if (!valid) return false
 
-        this.saveLoading = true
-
         try {
           // 发送请求
           const { name, intro, email } = this.userProfile
@@ -219,16 +224,16 @@ export default {
 
           // 消息提示
           this.$msgSuccess('信息修改成功！')
-
-          this.saveLoading = false
         } catch (ex) {
           console.log(ex)
           // 消息提示
           this.$msgError('信息修改失败！')
-
-          this.saveLoading = false
         }
       })
+    },
+    onReset() {
+      this.loadUserProfile()
+      this.$msgSuccess('重置信息成功！')
     }
   }
 }
