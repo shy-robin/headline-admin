@@ -31,7 +31,11 @@
               <el-input type="textarea" v-model="userProfile.intro"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSaveProfile">保存设置</el-button>
+              <el-button
+                type="primary"
+                :loading="saveLoading"
+                @click="onSaveProfile"
+              >保存设置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -115,7 +119,8 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      saveLoading: false // 保存设置按钮是否 loading
     }
   },
   created() {
@@ -201,6 +206,9 @@ export default {
     onSaveProfile() {
       this.$refs.userProfile.validate(async valid => {
         if (!valid) return false
+
+        this.saveLoading = true
+
         try {
           // 发送请求
           const { name, intro, email } = this.userProfile
@@ -211,10 +219,14 @@ export default {
 
           // 消息提示
           this.$msgSuccess('信息修改成功！')
+
+          this.saveLoading = false
         } catch (ex) {
           console.log(ex)
           // 消息提示
           this.$msgError('信息修改失败！')
+
+          this.saveLoading = false
         }
       })
     }
