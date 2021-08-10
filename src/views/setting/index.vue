@@ -47,6 +47,8 @@
               <input
                 type="file"
                 id="file"
+                @change="onFileChange"
+                ref="file"
                 hidden
               >
             </div>
@@ -78,6 +80,10 @@ export default {
       } catch (ex) {
         console.log(ex)
       }
+    },
+    onFileChange() {
+      console.log('change')
+      this.$refs.file.value = null
     }
   }
 }
