@@ -222,6 +222,9 @@ export default {
           const { name, intro, email } = this.userProfile
           await updateProfile({ name, intro, email })
 
+          // 更新顶部栏的个人信息
+          EventBus.$emit('profileUpdated', { name, email })
+
           // 更新信息页面
           this.loadUserProfile()
 
