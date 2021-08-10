@@ -9,20 +9,25 @@
       </div>
       <el-row>
         <el-col :span="12">
-          <el-form ref="form" :model="userProfile" label-width="60px">
+          <el-form
+            ref="userProfile"
+            :model="userProfile"
+            label-width="60px"
+            :rules="profileRules"
+          >
             <el-form-item label="编号">
               <el-input disabled v-model="userProfile.id"></el-input>
             </el-form-item>
             <el-form-item label="手机">
               <el-input disabled v-model="userProfile.mobile"></el-input>
             </el-form-item>
-            <el-form-item label="昵称">
+            <el-form-item label="昵称" prop="name">
               <el-input v-model="userProfile.name"></el-input>
             </el-form-item>
-            <el-form-item label="邮箱">
+            <el-form-item label="邮箱" prop="email">
               <el-input v-model="userProfile.email"></el-input>
             </el-form-item>
-            <el-form-item label="介绍">
+            <el-form-item label="介绍" prop="intro">
               <el-input type="textarea" v-model="userProfile.intro"></el-input>
             </el-form-item>
             <el-form-item>
@@ -92,7 +97,25 @@ export default {
       dialogVisible: false, // 图片预览窗口是否可见
       previewURL: '', // 预览链接
       cropper: null, // 图片裁切器实例
-      isLoading: false // 修改头像按钮是否在加载
+      isLoading: false, // 修改头像按钮是否在加载
+      profileRules: {
+        name: [
+          { required: true, message: '名称不能为空', trigger: 'blur' },
+          { min: 1, max: 7, message: '请输入 1 到 7 个字符', trigger: 'blur' }
+        ],
+        intro: [
+          { required: true, message: '介绍不能为空', trigger: 'blur' },
+          { pattern: /^.{1,40}$/, message: '请输入 1 到 40 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '邮箱不能为空', trigger: 'blur' },
+          {
+            pattern: /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+            message: '邮箱格式错误',
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   created() {
@@ -175,10 +198,14 @@ export default {
         }
       })
     },
-    async onSaveProfile() {
-      const { name, intro, email } = this.userProfile
-      const res = await updateProfile({ name, intro, email })
-      console.log(res)
+    onSaveProfile() {
+      this.$refs.userProfile.validate(async valid => {
+        if (!valid) return false
+
+        const { name, intro, email } = this.userProfile
+        const res = await updateProfile({ name, intro, email })
+        console.log(res)
+      })
     }
   }
 }
