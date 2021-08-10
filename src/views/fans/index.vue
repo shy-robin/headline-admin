@@ -14,7 +14,9 @@
         <el-tab-pane label="粉丝列表" name="list">
           <fans-list></fans-list>
         </el-tab-pane>
-        <el-tab-pane label="粉丝画像" name="chart">figure</el-tab-pane>
+        <el-tab-pane label="粉丝画像" name="chart">
+          <fans-chart></fans-chart>
+        </el-tab-pane>
       </el-tabs>
     </el-card>
   </div>
@@ -22,11 +24,13 @@
 
 <script>
 import FansList from './components/FansList.vue'
+import FansChart from './components/FansChart.vue'
 
 export default {
   name: 'FansIndex',
   components: {
-    FansList
+    FansList,
+    FansChart
   },
   data() {
     return {
