@@ -57,11 +57,13 @@
       @opened="onDialogOpened"
       @closed="onDialogClosed"
     >
-      <img
-        :src="previewURL"
-        style="height:100px;"
-        ref="preview-image"
-      >
+      <div class="image-wrapper">
+        <img
+          class="image"
+          :src="previewURL"
+          ref="preview-image"
+        >
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -122,5 +124,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.image-wrapper {
+  .image {
+    display: block;
+    max-width: 100%;
+    height: 200px;
+  }
+}
 </style>
