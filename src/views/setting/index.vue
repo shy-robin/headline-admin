@@ -105,6 +105,14 @@ export default {
     },
     onDialogOpened() {
       const image = this.$refs['preview-image']
+
+      // 方式二：调用 cropper 中的 replace 方法
+      // 但会存在图片切换时闪烁的问题，效果没有方式一好
+      if (this.cropper) {
+        this.cropper.replace(this.previewURL)
+        return
+      }
+
       this.cropper = new Cropper(image, {
         aspectRatio: 16 / 9,
         crop(event) {
@@ -122,7 +130,7 @@ export default {
       // 解决选择图片，裁切器的图片没有更新的问题
       // 原因：cropper 实例没有改变，图片就不会改变
       // 方式一：在dialog关闭后，销毁 cropper 实例
-      this.cropper.destroy()
+      // this.cropper.destroy()
     }
   }
 }
