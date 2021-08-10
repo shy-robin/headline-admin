@@ -94,6 +94,7 @@ import {
   uploadAvatar,
   updateProfile
 } from 'api/user.js'
+import EventBus from 'utils/bus.js'
 import 'cropperjs/dist/cropper.css'
 import Cropper from 'cropperjs'
 
@@ -184,7 +185,9 @@ export default {
           // 接口要求请求头有 'Content-Type': 'multipart/form-data'
           // 这个 header 不需要手动设置，只需要 data 是一个 FormData 对象
           // 且对象里面有后端对应的字段即可
-          await uploadAvatar(fd)
+          const res = await uploadAvatar(fd)
+
+          EventBus.$emit('avatarUpdated', res.data.data.photo) // 更新顶部栏头像
 
           // 3. 关闭窗口
           this.dialogVisible = false

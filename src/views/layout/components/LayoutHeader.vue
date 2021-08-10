@@ -42,6 +42,9 @@ export default {
   },
   created() {
     this.loadUserProfile()
+    EventBus.$on('avatarUpdated', photo => {
+      this.userInfo.photo = photo
+    })
   },
   methods: {
     async loadUserProfile() {
