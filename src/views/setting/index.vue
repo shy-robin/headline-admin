@@ -37,12 +37,6 @@
               :src="userProfile.photo"
             ></el-avatar>
             <div>
-              <!-- <p @click="$refs.file.click()">点击修改头像</p>
-              <input
-                ref="file"
-                type="file"
-                hidden
-              > -->
               <label for="file">点击编辑头像</label>
               <input
                 type="file"
@@ -56,6 +50,16 @@
         </el-col>
       </el-row>
     </el-card>
+    <el-dialog
+      title="图片预览"
+      :visible.sync="dialogVisible"
+      :append-to-body="true"
+    >
+      <img
+        :src="previewURL"
+        style="height:100px;"
+      >
+    </el-dialog>
   </div>
 </template>
 
@@ -66,7 +70,9 @@ export default {
   name: 'SettingIndex',
   data() {
     return {
-      userProfile: {} // 用户信息
+      userProfile: {}, // 用户信息
+      dialogVisible: false, // 图片预览窗口是否可见
+      previewURL: '' // 预览链接
     }
   },
   created() {
@@ -82,7 +88,13 @@ export default {
       }
     },
     onFileChange() {
-      console.log('change')
+      // 选择的文件
+      const file = this.$refs.file
+      // 生成一个预览链接
+      const blobData = window.URL.createObjectURL(file.files[0])
+      this.previewURL = blobData
+      // 显示预览窗口
+      this.dialogVisible = true
       this.$refs.file.value = null
     }
   }
