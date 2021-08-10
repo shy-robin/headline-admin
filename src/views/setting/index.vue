@@ -56,6 +56,7 @@
       :append-to-body="true"
       @opened="onDialogOpened"
       @closed="onDialogClosed"
+      :before-close="onBeforeClose"
     >
       <div class="image-wrapper">
         <img
@@ -64,6 +65,10 @@
           ref="preview-image"
         >
       </div>
+      <el-button
+        style="margin-top:20px;width:100%;"
+        type="primary"
+      >保存头像</el-button>
     </el-dialog>
   </div>
 </template>
@@ -112,12 +117,18 @@ export default {
         aspectRatio: 1, // 选择框比例，固定为 1:1
         viewMode: 1, // 视图模式，设置为选择框不能超过图片区域
         cropBoxResizable: false, // 选择框大小不可变
-        dragMode: 'none' // 背景不可拖拽
+        dragMode: 'move' // 背景可以拖拽
       })
     },
     onDialogClosed() {
       // 解决选择图片，裁切器的图片没有更新的问题
       this.cropper.destroy()
+    },
+    async onBeforeClose(done) {
+      try {
+        await this.$warningBox('确定退出编辑吗？', '提示')
+        done()
+      } catch {}
     }
   }
 }
