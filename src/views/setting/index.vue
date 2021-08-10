@@ -54,10 +54,12 @@
       title="图片预览"
       :visible.sync="dialogVisible"
       :append-to-body="true"
+      @opened="onDialogOpened"
     >
       <img
         :src="previewURL"
         style="height:100px;"
+        ref="preview-image"
       >
     </el-dialog>
   </div>
@@ -65,6 +67,8 @@
 
 <script>
 import { getUserProfile } from 'api/user.js'
+import 'cropperjs/dist/cropper.css'
+import Cropper from 'cropperjs'
 
 export default {
   name: 'SettingIndex',
@@ -96,6 +100,22 @@ export default {
       // 显示预览窗口
       this.dialogVisible = true
       this.$refs.file.value = null
+    },
+    onDialogOpened() {
+      const image = this.$refs['preview-image']
+      const cropper = new Cropper(image, {
+        aspectRatio: 16 / 9,
+        crop(event) {
+          console.log(event.detail.x)
+          console.log(event.detail.y)
+          console.log(event.detail.width)
+          console.log(event.detail.height)
+          console.log(event.detail.rotate)
+          console.log(event.detail.scaleX)
+          console.log(event.detail.scaleY)
+        }
+      })
+      console.log(cropper)
     }
   }
 }
