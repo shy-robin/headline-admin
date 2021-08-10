@@ -69,6 +69,7 @@
         style="margin-top:20px;width:100%;"
         type="primary"
         @click="onUpdateAvatar"
+        :loading="isLoading"
       >保存头像</el-button>
     </el-dialog>
   </div>
@@ -86,7 +87,8 @@ export default {
       userProfile: {}, // 用户信息
       dialogVisible: false, // 图片预览窗口是否可见
       previewURL: '', // 预览链接
-      cropper: null // 图片裁切器实例
+      cropper: null, // 图片裁切器实例
+      isLoading: false // 修改头像按钮是否在加载
     }
   },
   created() {
@@ -132,6 +134,8 @@ export default {
       } catch {}
     },
     onUpdateAvatar() {
+      this.isLoading = true // 加载中
+
       // 1. 获取到裁剪的图片数据
       this.cropper.getCroppedCanvas().toBlob(async file => {
         const fd = new FormData()
@@ -152,6 +156,8 @@ export default {
           // 5. 将头像直接设置为 blob 数据，这样就不用再向服务器发送更新请求了
           const blobData = window.URL.createObjectURL(file)
           this.userProfile.photo = blobData
+
+          this.isLoading = false // 加载完成
         } catch (ex) {
           console.log(ex)
 
@@ -160,6 +166,8 @@ export default {
 
           // 4. 消息提示
           this.$msgError('图片尺寸过大，头像修改失败！')
+
+          this.isLoading = false // 加载完成
         }
       })
     }
