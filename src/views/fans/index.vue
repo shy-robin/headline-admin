@@ -11,7 +11,9 @@
         v-model="activeTab"
         type="card"
       >
-        <el-tab-pane label="粉丝列表" name="list">list</el-tab-pane>
+        <el-tab-pane label="粉丝列表" name="list">
+          <fans-list></fans-list>
+        </el-tab-pane>
         <el-tab-pane label="粉丝画像" name="chart">figure</el-tab-pane>
       </el-tabs>
     </el-card>
@@ -19,8 +21,13 @@
 </template>
 
 <script>
+import FansList from './components/FansList.vue'
+
 export default {
   name: 'FansIndex',
+  components: {
+    FansList
+  },
   data() {
     return {
       activeTab: 'list'
