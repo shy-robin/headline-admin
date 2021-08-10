@@ -201,10 +201,21 @@ export default {
     onSaveProfile() {
       this.$refs.userProfile.validate(async valid => {
         if (!valid) return false
+        try {
+          // 发送请求
+          const { name, intro, email } = this.userProfile
+          await updateProfile({ name, intro, email })
 
-        const { name, intro, email } = this.userProfile
-        const res = await updateProfile({ name, intro, email })
-        console.log(res)
+          // 更新信息页面
+          this.loadUserProfile()
+
+          // 消息提示
+          this.$msgSuccess('信息修改成功！')
+        } catch (ex) {
+          console.log(ex)
+          // 消息提示
+          this.$msgError('信息修改失败！')
+        }
       })
     }
   }
