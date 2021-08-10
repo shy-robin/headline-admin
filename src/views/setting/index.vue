@@ -106,31 +106,16 @@ export default {
     onDialogOpened() {
       const image = this.$refs['preview-image']
 
-      // 方式二：调用 cropper 中的 replace 方法
-      // 但会存在图片切换时闪烁的问题，效果没有方式一好
-      if (this.cropper) {
-        this.cropper.replace(this.previewURL)
-        return
-      }
-
       this.cropper = new Cropper(image, {
-        aspectRatio: 16 / 9,
-        crop(event) {
-          console.log(event.detail.x)
-          console.log(event.detail.y)
-          console.log(event.detail.width)
-          console.log(event.detail.height)
-          console.log(event.detail.rotate)
-          console.log(event.detail.scaleX)
-          console.log(event.detail.scaleY)
-        }
+        aspectRatio: 1, // 选择框比例，固定为 1:1
+        viewMode: 1, // 视图模式，设置为选择框不能超过图片区域
+        cropBoxResizable: false, // 选择框大小不可变
+        dragMode: 'none' // 背景不可拖拽
       })
     },
     onDialogClosed() {
       // 解决选择图片，裁切器的图片没有更新的问题
-      // 原因：cropper 实例没有改变，图片就不会改变
-      // 方式一：在dialog关闭后，销毁 cropper 实例
-      // this.cropper.destroy()
+      this.cropper.destroy()
     }
   }
 }
