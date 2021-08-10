@@ -31,10 +31,26 @@
           </el-form>
         </el-col>
         <el-col :span="12" style="display:flex;justify-content:center;">
-          <el-avatar
-            :size="240"
-            :src="userProfile.photo"
-          ></el-avatar>
+          <div class="avatar-wrapper">
+            <el-avatar
+              :size="240"
+              :src="userProfile.photo"
+            ></el-avatar>
+            <div>
+              <!-- <p @click="$refs.file.click()">点击修改头像</p>
+              <input
+                ref="file"
+                type="file"
+                hidden
+              > -->
+              <label for="file">点击编辑头像</label>
+              <input
+                type="file"
+                id="file"
+                hidden
+              >
+            </div>
+          </div>
         </el-col>
       </el-row>
     </el-card>
