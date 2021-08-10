@@ -2,17 +2,17 @@
   <div class="fans-list-container">
     <el-row :gutter="20">
       <el-col
-        v-for="(item, index) in 24" :key="index"
+        v-for="(item, index) in fansList" :key="index"
         :lg="3" :md="4" :sm="6" :xs="8"
       >
         <div class="fans-container">
           <el-avatar
             :size="70"
-            :src="url"
+            :src="item.photo"
             shape="circle"
             fit="cover"
           ></el-avatar>
-          <span>{{ name }}</span>
+          <span>{{ item.name }}</span>
           <el-button
             icon="el-icon-plus"
             size="mini"
@@ -23,34 +23,44 @@
     <el-pagination
       background
       layout="prev, pager, next"
-      :total="1000">
+      :total="totalCount"
+      :current-page.sync="page"
+      @current-change="loadFansList(page)"
+    >
     </el-pagination>
   </div>
 </template>
 
 <script>
-// import { getFansList } from 'api/fans.js'
+import { getFansList } from 'api/fans.js'
 
 export default {
   name: 'FansList',
   data() {
     return {
-      perPage: 20, // 每页数量
-      name: '这里有七个字符',
-      url: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
+      perPage: 24, // 每页数量
+      fansList: [], // 粉丝列表
+      totalCount: 0, // 粉丝总数
+      page: 1 // 当前页码
     }
   },
   created() {
-    // this.loadFansList(1)
+    this.loadFansList(1)
   },
   methods: {
-    // async loadFansList(page) {
-    //   const res = await getFansList({
-    //     page,
-    //     per_page: this.perPage
-    //   })
-    //   console.log(res)
-    // }
+    async loadFansList(page) {
+      try {
+        const res = await getFansList({
+          page,
+          per_page: this.perPage
+        })
+        const { results: fansList, total_count: totalCount } = res.data.data
+        this.fansList = fansList
+        this.totalCount = totalCount
+      } catch (ex) {
+        console.log(ex)
+      }
+    }
   }
 }
 </script>
