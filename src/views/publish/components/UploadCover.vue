@@ -56,14 +56,29 @@
             @click="onChooseImage"
           >选择</el-button>
         </el-tab-pane>
-        <el-tab-pane label="上传图片" name="upload">配置管理</el-tab-pane>
+        <el-tab-pane label="上传图片" name="upload">
+          <div>
+            <input type="file" ref="file" @change="onFileChange">
+          </div>
+          <div>
+            <el-image
+              :src="previewImage"
+            />
+          </div>
+          <el-button
+            type='primary'
+            style="margin-top:10px;float:right;margin-right:10px;"
+            @click="onConfirmImage"
+            :loading="isUploadLoading"
+          >确定</el-button>
+        </el-tab-pane>
       </el-tabs>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getImageList } from 'api/image.js'
+import { getImageList, uploadImage } from 'api/image.js'
 
 export default {
   name: 'UploadCover',
@@ -77,7 +92,10 @@ export default {
       totalCount: 0,
       imageList: [],
       currentCheckedIndex: null,
-      currentCheckedImage: ''
+      currentCheckedImage: '',
+      checkedFile: '',
+      previewImage: '',
+      isUploadLoading: false
     }
   },
   methods: {
@@ -114,6 +132,35 @@ export default {
     onChooseImage() {
       this.dialogVisible = false
       this.currentCheckedImage = this.imageList[this.currentCheckedIndex].url
+    },
+    onFileChange() {
+      const file = this.$refs.file.files[0]
+      if (file) {
+        const blobData = window.URL.createObjectURL(file)
+        this.previewImage = blobData
+        this.checkedFile = file
+      }
+    },
+    async onConfirmImage() {
+      if (!this.checkedFile) {
+        this.$msgError('请选择图片！')
+        return
+      }
+      this.isUploadLoading = true
+      const fd = new FormData()
+      fd.append('image', this.checkedFile)
+      try {
+        const res = await uploadImage(fd)
+        const url = res.data.data.url
+        this.currentCheckedImage = url
+        this.$msgSuccess('上传图片成功！')
+        this.isUploadLoading = false
+        this.dialogVisible = false
+      } catch (ex) {
+        console.log(ex)
+        this.$msgError('图片尺寸过大！请重新上传')
+        this.isUploadLoading = false
+      }
     }
   }
 }
