@@ -1,6 +1,7 @@
 import axios from 'axios'
 import JSONBig from 'json-bigint'
 import router from '@/router/index.js'
+import { Message } from 'element-ui'
 
 // 创建一个 axios 实例
 const request = axios.create({
@@ -54,6 +55,25 @@ request.interceptors.response.use(
     if (status === 401) {
       window.localStorage.removeItem('user') // 清除浏览器中的 token
       router.push({ name: 'login' }) // 跳转到登录页
+      Message.error({
+        message: '登录状态无效，请重新登录！',
+        center: true
+      })
+    } else if (status === 403) {
+      Message.warning({
+        message: '没有操作权限！',
+        center: true
+      })
+    } else if (status === 400) {
+      Message.error({
+        message: '请求参数错误，请重新检查！',
+        center: true
+      })
+    } else if (status >= 500) {
+      Message.error({
+        message: '服务器内部异常，请稍后重试！',
+        center: true
+      })
     }
 
     // 3. 异常返回
