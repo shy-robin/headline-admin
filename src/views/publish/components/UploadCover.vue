@@ -1,12 +1,11 @@
 <template>
   <div class="upload-cover-container">
-    <el-upload
+    <div
       class="avatar-uploader"
-      :show-file-list="false"
     >
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-    </el-upload>
+    </div>
   </div>
 </template>
 
@@ -24,30 +23,29 @@ export default {
 <style lang="scss" scoped>
 .upload-cover-container {
   .avatar-uploader {
-    padding-right: 20px;
-    ::v-deep .el-upload {
-      border: 1px dashed #d9d9d9;
-      border-radius: 6px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-    ::v-deep .el-upload:hover {
-      border-color: #409EFF;
-    }
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    margin-right: 20px;
     .avatar-uploader-icon {
       font-size: 28px;
       color: #8c939d;
-      width: 178px;
-      height: 178px;
-      line-height: 178px;
+      width: 150px;
+      height: 150px;
+      line-height: 150px;
       text-align: center;
     }
     .avatar {
-      width: 178px;
-      height: 178px;
+      width: 150px;
+      height: 150px;
       display: block;
     }
+  }
+  .avatar-uploader:hover {
+    border-color: #409EFF;
   }
 }
 </style>
