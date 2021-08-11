@@ -4,7 +4,7 @@
       class="avatar-uploader"
       @click="onUploadCover"
     >
-      <img v-if="imageUrl" :src="imageUrl" class="avatar">
+      <img v-if="currentCheckedImage" :src="currentCheckedImage" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
     </div>
     <el-dialog
@@ -26,17 +26,19 @@
             <el-col
               v-for="(item, index) in imageList" :key="index"
               class="image-container"
-              :span="6"
+              :xs="12" :sm="8" :md="6"
             >
             <div class="image-wrapper">
               <el-image
                 class="image"
-                style="height:140px;width:100%"
                 :src="item.url"
-                :preview-src-list="[item.url]"
                 fit="fill"
+                @click="onImageCheck(index)"
                 lazy
               ></el-image>
+              <div class="image-check" v-if="index===currentCheckedIndex">
+                <i class="el-icon-check"></i>
+              </div>
             </div>
             </el-col>
           </el-row>
@@ -48,6 +50,11 @@
             layout="prev, pager, next"
             :total="totalCount">
           </el-pagination>
+          <el-button
+            type='primary'
+            style="margin-top:10px;float:right;margin-right:10px;"
+            @click="onChooseImage"
+          >选择</el-button>
         </el-tab-pane>
         <el-tab-pane label="上传图片" name="upload">配置管理</el-tab-pane>
       </el-tabs>
@@ -62,14 +69,15 @@ export default {
   name: 'UploadCover',
   data() {
     return {
-      imageUrl: '',
       dialogVisible: false,
       activeTab: 'lib',
       isCollect: false,
       perPage: 8,
       page: 1,
       totalCount: 0,
-      imageList: []
+      imageList: [],
+      currentCheckedIndex: null,
+      currentCheckedImage: ''
     }
   },
   methods: {
@@ -78,6 +86,7 @@ export default {
       this.dialogVisible = true
     },
     async loadImageList(page) {
+      this.currentCheckedIndex = null
       try {
         const res = await getImageList({
           page,
@@ -87,6 +96,7 @@ export default {
         const { results: imageList, total_count: totalCount } = res.data.data
         imageList.forEach(item => { // 给每张图片都添加一个 isLoading 属性
           item.isLoading = false
+          item.isChecked = false
         })
         this.imageList = imageList
         this.totalCount = totalCount
@@ -97,6 +107,13 @@ export default {
     onLabelChange(isCollect) {
       this.isCollect = isCollect
       this.loadImageList(1)
+    },
+    onImageCheck(index) {
+      this.currentCheckedIndex = index
+    },
+    onChooseImage() {
+      this.dialogVisible = false
+      this.currentCheckedImage = this.imageList[this.currentCheckedIndex].url
     }
   }
 }
@@ -129,5 +146,29 @@ export default {
   .avatar-uploader:hover {
     border-color: #409EFF;
   }
+}
+.image-wrapper {
+  position: relative;
+  .image {
+    height:140px;
+    width:100%;
+  }
+  .image-check {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    background-color: #67c23a;
+    text-align: center;
+    i {
+      color: #fff;
+    }
+  }
+}
+.image-wrapper:hover {
+  cursor: pointer;
 }
 </style>
