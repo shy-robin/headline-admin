@@ -14,42 +14,12 @@
     >
       <el-tabs v-model="activeTab" type="card">
         <el-tab-pane label="素材库" name="lib">
-          <el-radio-group
-            v-model="isCollect"
-            size="mini"
-            @change='onLabelChange'
-          >
-            <el-radio-button :label="false">全部</el-radio-button>
-            <el-radio-button :label="true">收藏</el-radio-button>
-          </el-radio-group>
-          <el-row :gutter="20" style="margin:10px 0;">
-            <el-col
-              v-for="(item, index) in imageList" :key="index"
-              class="image-container"
-              :xs="12" :sm="8" :md="6"
-            >
-            <div class="image-wrapper">
-              <el-image
-                class="image"
-                :src="item.url"
-                fit="fill"
-                @click="onImageCheck(index)"
-                lazy
-              ></el-image>
-              <div class="image-check" v-if="index===currentCheckedIndex">
-                <i class="el-icon-check"></i>
-              </div>
-            </div>
-            </el-col>
-          </el-row>
-          <el-pagination
-            class="pagination"
-            background
-            :current-page.sync="page"
-            @current-change="loadImageList(page)"
-            layout="prev, pager, next"
-            :total="totalCount">
-          </el-pagination>
+          <image-list
+            ref="imageList"
+            :is-show-Add="false"
+            :is-show-operation="false"
+            :is-show-checked="true"
+          />
           <el-button
             type='primary'
             style="margin-top:10px;float:right;margin-right:10px;"
@@ -78,21 +48,19 @@
 </template>
 
 <script>
-import { getImageList, uploadImage } from 'api/image.js'
+import { uploadImage } from 'api/image.js'
+import ImageList from 'components/image-list/'
 
 export default {
   name: 'UploadCover',
+  components: {
+    ImageList
+  },
   props: ['value'],
   data() {
     return {
       dialogVisible: false,
       activeTab: 'lib',
-      isCollect: false,
-      perPage: 8,
-      page: 1,
-      totalCount: 0,
-      imageList: [],
-      currentCheckedIndex: null,
       checkedFile: '',
       previewImage: '',
       isUploadLoading: false
@@ -100,38 +68,13 @@ export default {
   },
   methods: {
     onUploadCover() {
-      this.loadImageList(1)
       this.dialogVisible = true
-    },
-    async loadImageList(page) {
-      this.currentCheckedIndex = null
-      try {
-        const res = await getImageList({
-          page,
-          collect: this.isCollect,
-          per_page: this.perPage
-        })
-        const { results: imageList, total_count: totalCount } = res.data.data
-        imageList.forEach(item => { // 给每张图片都添加一个 isLoading 属性
-          item.isLoading = false
-          item.isChecked = false
-        })
-        this.imageList = imageList
-        this.totalCount = totalCount
-      } catch (ex) {
-        console.log(ex)
-      }
-    },
-    onLabelChange(isCollect) {
-      this.isCollect = isCollect
-      this.loadImageList(1)
-    },
-    onImageCheck(index) {
-      this.currentCheckedIndex = index
     },
     onChooseImage() {
       this.dialogVisible = false
-      this.$emit('input', this.imageList[this.currentCheckedIndex].url)
+      const currentIndex = this.$refs.imageList.currentCheckedIndex
+      const imageList = this.$refs.imageList.imageList
+      this.$emit('input', imageList[currentIndex].url)
     },
     onFileChange() {
       const file = this.$refs.file.files[0]

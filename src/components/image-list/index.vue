@@ -28,10 +28,17 @@
           class="image"
           style="height:150px;width:100%"
           :src="item.url"
-          :preview-src-list="[item.url]"
+          :preview-src-list="isShowOperation ? [item.url] : null"
+          @click="isShowOperation ? null : onImageCheck(index)"
           fit="fill"
           lazy
         ></el-image>
+        <div
+          class="image-check"
+          v-if="isShowChecked && index===currentCheckedIndex"
+        >
+          <i class="el-icon-check"></i>
+        </div>
         <div class="image-operation" v-if="isShowOperation">
           <el-button
             :icon="item.is_collected ?
@@ -102,6 +109,10 @@ export default {
     isShowOperation: {
       type: Boolean,
       default: true
+    },
+    isShowChecked: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -116,14 +127,16 @@ export default {
       dialogVisible: false, // 展示上传图片窗口
       uploadHeaders: { // 图片上传请求头
         Authorization: `Bearer ${token}`
-      }
+      },
+      currentCheckedIndex: null
     }
   },
   created() {
-    this.loadImageList()
+    this.loadImageList(1)
   },
   methods: {
     async loadImageList(page) {
+      this.currentCheckedIndex = null
       try {
         const res = await getImageList({
           page,
@@ -140,8 +153,7 @@ export default {
         console.log(ex)
       }
     },
-    onLabelChange(isCollect) {
-      this.isCollect = isCollect
+    onLabelChange() {
       this.loadImageList(1)
     },
     onUploadSuccess() {
@@ -179,6 +191,9 @@ export default {
         this.imageList[index].isLoading = false
         this.$msgError('图片删除失败！')
       }
+    },
+    onImageCheck(index) {
+      this.currentCheckedIndex = index
     }
   }
 }
@@ -197,12 +212,29 @@ export default {
       justify-content: space-evenly;
       display: none;
     }
+    .image-check {
+      position: absolute;
+      top: 15px;
+      right: 5px;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      border-radius: 50%;
+      background-color: #67c23a;
+      text-align: center;
+      i {
+        color: #fff;
+      }
+    }
   }
   .image-wrapper:hover .image-operation  {
     display: flex;
   }
   .pagination {
     padding-top: 10px;
+  }
+  .image-wrapper:hover {
+    cursor: pointer;
   }
 }
 ::v-deep .el-dialog {
