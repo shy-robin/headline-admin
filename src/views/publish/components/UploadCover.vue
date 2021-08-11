@@ -4,7 +4,7 @@
       class="avatar-uploader"
       @click="onUploadCover"
     >
-      <img v-if="currentCheckedImage" :src="currentCheckedImage" class="avatar">
+      <img v-if="value" :src="value" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
     </div>
     <el-dialog
@@ -82,6 +82,7 @@ import { getImageList, uploadImage } from 'api/image.js'
 
 export default {
   name: 'UploadCover',
+  props: ['value'],
   data() {
     return {
       dialogVisible: false,
@@ -92,7 +93,6 @@ export default {
       totalCount: 0,
       imageList: [],
       currentCheckedIndex: null,
-      currentCheckedImage: '',
       checkedFile: '',
       previewImage: '',
       isUploadLoading: false
@@ -131,7 +131,7 @@ export default {
     },
     onChooseImage() {
       this.dialogVisible = false
-      this.currentCheckedImage = this.imageList[this.currentCheckedIndex].url
+      this.$emit('input', this.imageList[this.currentCheckedIndex].url)
     },
     onFileChange() {
       const file = this.$refs.file.files[0]
@@ -152,7 +152,7 @@ export default {
       try {
         const res = await uploadImage(fd)
         const url = res.data.data.url
-        this.currentCheckedImage = url
+        this.$emit('input', url)
         this.$msgSuccess('上传图片成功！')
         this.isUploadLoading = false
         this.dialogVisible = false

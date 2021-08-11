@@ -38,8 +38,15 @@
             style="display:flex;"
             v-if="article.cover.type > 0"
           >
+            <!-- 组件中 v-model 的使用
+                 如：v-model="article"
+                 相当于：
+                 1. 默认给子组件传递一个名为 value 的数据， :value="article"
+                 2. 默认监听名为 input 的事件，@input="article=[参数]"
+            -->
             <upload-cover
-              v-for="item in article.cover.type" :key="item"
+              v-for="(item, index) in article.cover.type" :key="item"
+              v-model="article.cover.images[index]"
             ></upload-cover>
           </div>
         </el-form-item>
