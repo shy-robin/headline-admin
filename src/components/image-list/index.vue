@@ -10,6 +10,7 @@
         <el-radio-button :label="true">收藏</el-radio-button>
       </el-radio-group>
       <el-button
+        v-if="isShowAdd"
         type="success"
         round
         size="mini"
@@ -31,7 +32,7 @@
           fit="fill"
           lazy
         ></el-image>
-        <div class="image-operation">
+        <div class="image-operation" v-if="isShowOperation">
           <el-button
             :icon="item.is_collected ?
             'iconfont icon-shoucang2' : 'iconfont icon-shoucang_quxiaoshoucang'"
@@ -93,6 +94,16 @@ import {
 
 export default {
   name: 'ImageList',
+  props: {
+    isShowAdd: {
+      type: Boolean,
+      default: true
+    },
+    isShowOperation: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     const token = window.localStorage.getItem('user')
 
