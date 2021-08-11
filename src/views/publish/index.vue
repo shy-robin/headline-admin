@@ -34,12 +34,14 @@
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-          <!-- 使用 template 标签可以避免增加新的节点标签，也就是不会创造出多余的外层标签 -->
-          <template v-if="article.cover.type > 0">
+          <div
+            style="display:flex;"
+            v-if="article.cover.type > 0"
+          >
             <upload-cover
               v-for="item in article.cover.type" :key="item"
             ></upload-cover>
-          </template>
+          </div>
         </el-form-item>
         <el-form-item label="频道" prop="channel_id">
           <el-select v-model="article.channel_id" placeholder="请选择频道">
