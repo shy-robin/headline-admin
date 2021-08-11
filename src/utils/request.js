@@ -1,5 +1,6 @@
 import axios from 'axios'
 import JSONBig from 'json-bigint'
+import router from '@/router/index.js'
 
 // 创建一个 axios 实例
 const request = axios.create({
@@ -37,6 +38,26 @@ request.interceptors.request.use(
   // 请求失败会经过这里
   error => {
     console.log(error)
+  }
+)
+
+// 添加响应拦截器
+request.interceptors.response.use(
+  response => { // 所有状态码为 2xx 的响应会进入这里
+    return response // 成功状态码，直接返回响应
+  },
+  error => { // 任何状态码超出 2xx 的响应会进入这里
+    // 1. 获取状态码
+    const { status } = error.response
+
+    // 2. 处理异常状态码
+    if (status === 401) {
+      window.localStorage.removeItem('user') // 清除浏览器中的 token
+      router.push({ name: 'login' }) // 跳转到登录页
+    }
+
+    // 3. 异常返回
+    return Promise.reject(error)
   }
 )
 
