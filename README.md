@@ -5,7 +5,8 @@
 - 本项目是一个模仿  [头条号](https://mp.toutiao.com/) 的自媒体后台管理系统
 - 页面的一些数据是伪造的，另一些数据来自线上的接口
 - 参考文档：https://www.yuque.com/lipengzhou/toutiao-publish-vue/
-- 参考教程：https://www.bilibili.com/video/BV1yf4y167P6（感谢 [@lipengzhou](https://github.com/lipengzhou) 老师的细心讲解！）
+- 参考教程：https://www.bilibili.com/video/BV1yf4y167P6
+- 感谢 [@lipengzhou](https://github.com/lipengzhou) 老师的细心讲解！
 
 ## 2. 项目预览
 
