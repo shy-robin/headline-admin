@@ -47,19 +47,22 @@
 
 <script>
 import EventBus from 'utils/bus.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'LayoutAside',
   data() {
     return {
-      isCollapse: false,
-      themeColor: '#545c64'
+      isCollapse: false
     }
   },
   created() {
     EventBus.$on('foldMenu', () => {
       this.isCollapse = !this.isCollapse
     })
+  },
+  computed: {
+    ...mapState('themeMod', ['themeColor'])
   }
 }
 </script>

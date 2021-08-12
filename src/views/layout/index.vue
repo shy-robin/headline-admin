@@ -18,6 +18,7 @@
 <script>
 import LayoutAside from './components/LayoutAside.vue'
 import LayoutHeader from './components/LayoutHeader.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'LayoutIndex',
@@ -25,10 +26,8 @@ export default {
     LayoutAside,
     LayoutHeader
   },
-  data() {
-    return {
-      themeColor: '#545c64'
-    }
+  computed: {
+    ...mapState('themeMod', ['themeColor'])
   }
 }
 </script>

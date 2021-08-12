@@ -17,9 +17,13 @@
       >
         <el-submenu index="theme">
           <template slot="title">主题</template>
-          <el-menu-item index="red">红</el-menu-item>
-          <el-menu-item index="yello">黄</el-menu-item>
-          <el-menu-item index="blue">蓝</el-menu-item>
+          <!-- 注意传入的 index 必须是字符串 -->
+          <el-menu-item
+            v-for="(item, index) in colors" :key="index"
+            :index="index.toString()"
+          >
+            {{ item.name }}
+          </el-menu-item>
         </el-submenu>
         <el-submenu index="user">
           <template slot="title">
@@ -40,14 +44,14 @@
 <script>
 import { getUserProfile } from 'api/user.js'
 import EventBus from 'utils/bus.js'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'LayoutHeader',
   data() {
     return {
       userInfo: {}, // 用户个人信息
-      isCollapse: false,
-      themeColor: '#545c64'
+      isCollapse: false
     }
   },
   created() {
@@ -86,17 +90,10 @@ export default {
     handleSelect(index, path) {
       switch (path[0]) {
         case 'theme':
-          switch (path[1]) {
-            case 'red':
-              console.log('red')
-              break
-            case 'yellow':
-              console.log('yellow')
-              break
-            case 'blue':
-              console.log('blue')
-              break
-          }
+          index = parseInt(index) // 注意 index 要转换成数字
+          // 存到 localStorage
+          window.localStorage.setItem('themeColor', this.colors[index].color)
+          this.changeColor(parseInt(index)) // 切换颜色
           break
         case 'user':
           switch (path[1]) {
@@ -109,7 +106,11 @@ export default {
           }
           break
       }
-    }
+    },
+    ...mapMutations('themeMod', ['changeColor'])
+  },
+  computed: {
+    ...mapState('themeMod', ['colors', 'themeColor'])
   }
 }
 </script>
