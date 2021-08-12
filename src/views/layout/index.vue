@@ -4,7 +4,7 @@
       <layout-aside class="layout-aside" />
     </el-aside>
     <el-container>
-      <el-header class="header">
+      <el-header class="header" :style="{backgroundColor:themeColor}">
         <layout-header class="layout-header" />
       </el-header>
       <el-main>
@@ -24,6 +24,11 @@ export default {
   components: {
     LayoutAside,
     LayoutHeader
+  },
+  data() {
+    return {
+      themeColor: '#545c64'
+    }
   }
 }
 </script>
@@ -38,10 +43,10 @@ export default {
   .aside {
     .layout-aside {
       height: 100%;
+      border-right: none;
     }
   }
   .header {
-    border-bottom: 1px solid rgb(231, 231, 231);
     .layout-header {
       height: 100%;
     }

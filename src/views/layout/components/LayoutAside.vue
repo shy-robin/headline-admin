@@ -1,7 +1,7 @@
 <template>
   <el-menu
     :default-active="$route.path"
-    background-color="#545c64"
+    :background-color="themeColor"
     text-color="#fff"
     active-text-color="#ffd04b"
     router
@@ -52,7 +52,8 @@ export default {
   name: 'LayoutAside',
   data() {
     return {
-      isCollapse: false
+      isCollapse: false,
+      themeColor: '#545c64'
     }
   },
   created() {

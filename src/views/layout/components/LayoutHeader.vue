@@ -11,7 +11,9 @@
       <el-menu
         mode="horizontal"
         @select="handleSelect"
-        active="red"
+        active-text-color="#fff"
+        :background-color="themeColor"
+        text-color="#fff"
       >
         <el-submenu index="theme">
           <template slot="title">主题</template>
@@ -44,7 +46,8 @@ export default {
   data() {
     return {
       userInfo: {}, // 用户个人信息
-      isCollapse: false
+      isCollapse: false,
+      themeColor: '#545c64'
     }
   },
   created() {
@@ -117,6 +120,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   .left {
+    color: #fff;
     display: flex;
     align-items: center;
     i {
