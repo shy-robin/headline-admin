@@ -30,5 +30,5 @@ $ npm run build
 
 ## 致谢
 
-感谢 @lipengzhou 老师的讲解教程！
+感谢 [@lipengzhou](https://github.com/lipengzhou) 老师的讲解教程！
 
