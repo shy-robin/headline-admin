@@ -26,13 +26,19 @@
               v-model="user.isAgree"
             >我已阅读并同意用户协议和隐私条款</el-checkbox>
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="login-btn-container">
             <el-button
               class="login-btn"
               type="primary"
               @click="onLogin"
               :loading='isLoading'
             >登录</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              class="test-btn"
+              @click="onTest"
+            >登录测试</el-button>
           </el-form-item>
       </el-form>
     </div>
@@ -104,6 +110,11 @@ export default {
         console.log(ex)
       }
       this.isLoading = false // 关闭 loading
+    },
+    onTest() {
+      this.user.mobile = '13911111111'
+      this.user.code = '246810'
+      this.user.isAgree = true
     }
   },
   mounted() {
@@ -253,7 +264,13 @@ export default {
         width: 25px;
       }
     }
-    .login-btn {
+    .login-btn-container {
+      margin-bottom: 10px;
+      .login-btn {
+        width: 100%;
+      }
+    }
+    .test-btn {
       width: 100%;
     }
   }
