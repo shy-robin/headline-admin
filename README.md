@@ -1,24 +1,34 @@
-# headline-admin
+# 闪电号（仿今日头条后台管理系统）
 
-## Project setup
-```
-npm install
-```
+## 项目克隆
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+```shell
+$ git clone https://github.com/load-more/headline-admin.git
 ```
 
-### Compiles and minifies for production
-```
-npm run build
+## 项目初始化
+
+```shell
+$ npm install
 ```
 
-### Lints and fixes files
-```
-npm run lint
+## 运行项目
+
+```shell
+$ npm run serve
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 打包项目
+
+```shell
+$ npm run build
+```
+
+## 参考文档
+
+- https://www.yuque.com/lipengzhou/toutiao-publish-vue/
+
+## 致谢
+
+感谢 @lipengzhou 老师的讲解教程！
+
