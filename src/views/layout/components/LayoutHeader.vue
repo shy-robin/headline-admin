@@ -8,22 +8,29 @@
       <span class="greeting">{{ userInfo.email }}</span>
     </div>
     <div class="right">
-      <el-dropdown>
-        <div class="el-dropdown-link">
-          <el-image
-            class="avatar"
-            fit="cover"
-            :src="userInfo.photo"
-          ></el-image>
-          <span>
-            {{ userInfo.name }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>设置</el-dropdown-item>
-          <el-dropdown-item @click.native="onLogout">退出</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <el-menu
+        mode="horizontal"
+        @select="handleSelect"
+        active="red"
+      >
+        <el-submenu index="theme">
+          <template slot="title">主题</template>
+          <el-menu-item index="red">红</el-menu-item>
+          <el-menu-item index="yello">黄</el-menu-item>
+          <el-menu-item index="blue">蓝</el-menu-item>
+        </el-submenu>
+        <el-submenu index="user">
+          <template slot="title">
+            <el-image
+              class="avatar"
+              fit="cover"
+              :src="userInfo.photo"
+            ></el-image>{{ userInfo.name }}
+          </template>
+          <el-menu-item index="setting">设置</el-menu-item>
+          <el-menu-item index="logout">退出</el-menu-item>
+        </el-submenu>
+      </el-menu>
     </div>
   </div>
 </template>
@@ -72,6 +79,33 @@ export default {
       } catch (ex) {
         this.$msgNormal('已取消操作！')
       }
+    },
+    handleSelect(index, path) {
+      switch (path[0]) {
+        case 'theme':
+          switch (path[1]) {
+            case 'red':
+              console.log('red')
+              break
+            case 'yellow':
+              console.log('yellow')
+              break
+            case 'blue':
+              console.log('blue')
+              break
+          }
+          break
+        case 'user':
+          switch (path[1]) {
+            case 'setting':
+              console.log('setting')
+              break
+            case 'logout':
+              this.onLogout()
+              break
+          }
+          break
+      }
     }
   }
 }
@@ -94,16 +128,11 @@ export default {
     }
   }
   .right {
-    .el-dropdown-link {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      .avatar {
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-        border-radius: 50%;
-      }
+    .avatar {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      border-radius: 50%;
     }
   }
 }
