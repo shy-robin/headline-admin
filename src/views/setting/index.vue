@@ -49,16 +49,21 @@
               :size="240"
               :src="userProfile.photo"
             ></el-avatar>
-            <div>
-              <label for="file">点击编辑头像</label>
-              <input
-                type="file"
-                id="file"
-                @change="onFileChange"
-                ref="file"
-                hidden
-              >
-            </div>
+            <el-button
+              class="edit-button"
+              icon="el-icon-edit"
+              type="primary"
+              size="mini"
+              circle
+              @click="$refs.file.click()"
+            ></el-button>
+            <input
+              type="file"
+              id="file"
+              @change="onFileChange"
+              ref="file"
+              hidden
+            >
           </div>
         </el-col>
       </el-row>
@@ -251,6 +256,14 @@ export default {
     display: block;
     max-width: 100%;
     height: 200px;
+  }
+}
+.avatar-wrapper {
+  position: relative;
+  .edit-button {
+    position: absolute;
+    left: 0;
+    bottom: 0;
   }
 }
 </style>
