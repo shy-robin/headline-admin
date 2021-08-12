@@ -8,8 +8,11 @@
     :collapse='isCollapse'
   >
     <div class="logo">
-      <span v-if=!isCollapse>明日头条</span>
-      <span v-else>&nbsp;</span>
+      <span v-if=!isCollapse @click="$router.push('/')">闪电号</span>
+      <span
+        v-else
+        @click="$router.push('/')"
+      ><img src="headlines.svg" alt=""></span>
     </div>
     <el-menu-item index="/">
       <i class="iconfont icon-index-copy"></i>
@@ -63,10 +66,18 @@ export default {
 <style lang="scss" scoped>
 .logo {
   color: #fff;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
+  font-family: 'zihun';
   text-align: center;
   padding: 20px 20px;
+  span:hover {
+    cursor: pointer;
+    color: yellow;
+  }
+  img {
+    width: 20px;
+  }
 }
 .iconfont {
   width: 24px;

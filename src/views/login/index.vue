@@ -3,7 +3,9 @@
     <canvas id="particle-canvas">
     </canvas>
     <div class="login-form-wrapper">
-      <div class="logo-head">明日头条</div>
+      <div class="logo-head">
+        <img src="headlines.svg" class="logo" alt="">闪电号
+      </div>
       <el-form ref="loginForm" :model="user" :rules='formRules'>
           <el-form-item prop='mobile'>
             <el-input
@@ -241,11 +243,15 @@ export default {
     background-color: rgba(231, 231, 231, 0.9);
     z-index: 999;
     .logo-head {
-      color: #66b1ff;
+      color: yellow;
       font-weight: bold;
-      font-size: 30px;
+      font-size: 40px;
+      font-family: 'zihun';
       padding-bottom: 10px;
       text-align: center;
+      .logo {
+        width: 25px;
+      }
     }
     .login-btn {
       width: 100%;
