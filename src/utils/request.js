@@ -5,7 +5,8 @@ import { Message } from 'element-ui'
 
 // 创建一个 axios 实例
 const request = axios.create({
-  baseURL: 'http://api-toutiao-web.itheima.net/',
+  // baseURL: 'http://api-toutiao-web.itheima.net/',
+  baseURL: '/api',
   // 定义 axios 对后端返回的原始数据的处理
   transformResponse: [
     // data 就是后端返回的原始数据（未经处理的 JSON 字符串）
